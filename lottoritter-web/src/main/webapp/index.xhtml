@@ -1,0 +1,111 @@
+<!--
+    * Copyright 2017 Ulrich Cech & Christopher Schmidt
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * You should have received a copy of the GNU General Public License
+    * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    */
+-->
+<!--
+* @author Christopher Schmidt
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" xmlns:h="http://xmlns.jcp.org/jsf/html"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:outputScript name="js/home.js" library=""/>
+
+        <script type="text/javascript">
+            var nextDrawing6aus49 = "#{german6aus49ViewController.nextClosingDate}";
+            var nextDrawingEuroJackpot = "#{euroJackpotViewController.nextClosingDate}";
+            init();
+        </script>
+
+        <section class="content no-header">
+
+            <div class="home">
+
+                <div class="marketing">
+                    <div class="title">
+                        #{text['user.home.marketing.title']}
+                    </div>
+
+                    <div class="subtitle">
+                        #{text['user.home.marketing.subtitle']}
+                    </div>
+
+                    <div class="ulrich"/>
+                    <div class="christopher"/>
+                </div>
+                <div class="german6aus49">
+                    <div class="lottery-title">
+                        #{text['user.home.lotteries.german6aus49.title']}
+                    </div>
+
+                    <div class="jackpot">
+                        #{german6aus49ViewController.getCurrentJackpotLabel()}
+                    </div>
+
+                    <div class="deadline">
+                        <div class="next-drawing-text">
+                            #{text['lottery.jackpot.deadline']}
+                            <div class="number"><span class="jsHours6aus49">00</span><span
+                                    class="key">#{text['lottery.jackpot.deadline.hr']}</span></div>
+                            <div class="number"><span class="jsMinutes6aus49">00</span><span
+                                    class="key">#{text['lottery.jackpot.deadline.min']}</span></div>
+                            <div class="number"><span class="jsSeconds6aus49">00</span><span
+                                    class="key">#{text['lottery.jackpot.deadline.sec']}</span></div>
+                        </div>
+                    </div>
+
+                    <div class="play-button">
+                        <p:button icon="clover" value="#{text['user.home.lotteries.german6aus49.button']}"
+                                  outcome="/lotteries/german6aus49.xhtml"/>
+                    </div>
+                    <div class="german6aus49-logo"/>
+                </div>
+                <div class="eurojackpot">
+                    <div class="lottery-title">
+                        #{text['user.home.lotteries.eurojackpot.title']}
+                    </div>
+
+                    <div class="jackpot">
+                        #{euroJackpotViewController.getCurrentJackpotLabel()}
+                    </div>
+
+                    <div class="deadline">
+                        <div class="next-drawing-text">
+                            #{text['lottery.jackpot.deadline']}
+                            <div class="number"><span class="jsHoursEuroJackpot">00</span><span
+                                    class="key">#{text['lottery.jackpot.deadline.hr']}</span></div>
+                            <div class="number"><span class="jsMinutesEuroJackpot">00</span><span
+                                    class="key">#{text['lottery.jackpot.deadline.min']}</span></div>
+                            <div class="number"><span class="jsSecondsEuroJackpot">00</span><span
+                                    class="key">#{text['lottery.jackpot.deadline.sec']}</span></div>
+                        </div>
+                    </div>
+
+                    <div class="play-button">
+                        <p:button icon="clover" value="#{text['user.home.lotteries.eurojackpot.button']}"
+                                  outcome="/lotteries/eurojackpot.xhtml"/>
+                    </div>
+                    <div class="eurojackpot-logo">
+                        €
+                    </div>
+                </div>
+            </div>
+        </section>
+    </ui:define>
+
+</ui:composition>

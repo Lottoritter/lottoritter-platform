@@ -1,0 +1,490 @@
+<!--
+    * Copyright 2017 Ulrich Cech & Christopher Schmidt
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * You should have received a copy of the GNU General Public License
+    * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    */
+-->
+<!--
+* @author Christopher Schmidt
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:lottery="http://java.sun.com/jsf/composite/lottery/details"
+                xmlns:results="http://java.sun.com/jsf/composite/lottery/results"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <section class="content no-header">
+            <div class="profile">
+                <h1>#{text['user.profile.title']}</h1>
+
+                <div class="balance">
+                    <h:outputText value="#{text['user.profile.tabs.balance']}"/>
+                    <div class="value">
+                        #{profileViewController.getAccountBalanceForPlayerInCent()}
+                    </div>
+                </div>
+
+                <p:tabView id="tabs" dynamic="true" cache="false" styleClass="tab-bar">
+                    <p:tab title="#{text['user.profile.tabs.playerdata']}">
+
+                        <h:form id="personaldataForm">
+                            <p:message for="updatePlayerPersonalData"
+                                       display="text"
+                                       showSummary="true" showDetail="false"
+                                       styleClass="message"/>
+                            <div class="form dual-column-form">
+
+                                <div class="left" style="width: 35%">
+                                    <!-- email -->
+                                    <h:panelGroup id="emailGroup">
+                                        <div class="row">
+                                            <h:panelGroup>
+                                                <i class="indicator fa fa-envelope" aria-hidden="true"/>
+                                                <p:inputText id="email"
+                                                             value="#{profileViewController.changePersonalDataDataHolder.email}"
+                                                             placeholder="#{text['user.profile.tabs.playerdata.email']}"/>
+                                            </h:panelGroup>
+                                        </div>
+                                        <div class="row with-padding"
+                                             style="justify-content: left; margin-left: 45px">
+                                            <p:message for="email" display="text"/>
+                                        </div>
+                                    </h:panelGroup>
+                                </div>
+
+                                <div class="right" style="width: 60%">
+                                    <p:commandButton value="#{text['user.profile.tabs.playerdata.reset']}"
+                                                     icon="fa fa-refresh icon"
+                                                     actionListener="#{profileViewController.resetPersonalData}"
+                                                     update="tabs:personaldataForm"
+                                                     style="margin: 0 20px 0 10px"/>
+                                    <p:commandButton id="updatePlayerPersonalData"
+                                                     value="#{text['user.profile.tabs.playerdata.save']}"
+                                                     icon="fa fa-floppy-o icon"
+                                                     actionListener="#{profileViewController.changePersonalData('tabs:personaldataForm')}"
+                                                     update="tabs:personaldataForm"/>
+                                </div>
+                            </div>
+                        </h:form>
+                    </p:tab>
+                    <p:tab title="#{text['user.profile.tabs.change_password']}">
+                        <div class="form single-column-form">
+                            <h:form id="passwordForm" style="width: 40%">
+                                <p:message for="changePasswordBtn"
+                                           display="text"
+                                           showSummary="true" showDetail="false"
+                                           styleClass="message"/>
+
+                                <div class="row">
+                                    <i class="indicator fa fa-key" aria-hidden="true"/>
+                                    <p:password id="oldPassword"
+                                                placeholder="#{text['user.profile.tabs.change_password.old']}"
+                                                value="#{profileViewController.changePasswordDataHolder.oldPassword}"/>
+                                </div>
+                                <div class="row with-padding">
+                                    <p:message for="oldPassword" display="text"/>
+                                </div>
+
+                                <div class="row">
+                                    <i class="indicator fa fa-key" aria-hidden="true"/>
+                                    <p:password id="password"
+                                                placeholder="#{text['user.profile.tabs.change_password.new']}"
+                                                value="#{profileViewController.changePasswordDataHolder.newPassword}"/>
+
+                                </div>
+                                <div class="row with-padding">
+                                    <p:message for="password" display="text"/>
+                                </div>
+                                <div class="row">
+                                    <i class="indicator fa fa-key" aria-hidden="true"/>
+                                    <p:password id="passwordAgain"
+                                                placeholder="#{text['user.profile.tabs.change_password.new_repeat']}"
+                                                value="#{profileViewController.changePasswordDataHolder.newPasswordAgain}"/>
+                                </div>
+                                <div class="row with-padding">
+                                    <p:message for="passwordAgain" display="text"/>
+                                </div>
+                                <div class="row">
+                                    <p:commandButton icon="fa fa-floppy-o icon"
+                                                     id="changePasswordBtn"
+                                                     value="#{text['user.profile.tabs.change_password.change']}"
+                                                     actionListener="#{profileViewController.changePassword('tabs:passwordForm')}"
+                                                     update="tabs:passwordForm"/>
+                                </div>
+                            </h:form>
+                        </div>
+                    </p:tab>
+                    <p:tab title="#{text['user.profile.tabs.limits']}">
+                        <h:form id="limitsForm">
+                            <p:message for="changeLimitBtn"
+                                       display="text"
+                                       showSummary="true" showDetail="false"
+                                       styleClass="message"/>
+
+                            <div class="limits">
+                                <div class="form">
+                                    <div class="row">
+                                        #{text['user.profile.tabs.limits.legal']}
+                                    </div>
+
+                                    <div class="row with-padding"/>
+
+                                    <div class="row">
+                                        <div class="cells cell-left no-background"/>
+                                        <div class="cells cell-center text-only">#{text['user.profile.tabs.limits.current']}</div>
+                                        <div class="cells cell-right text-only">#{text['user.profile.tabs.limits.new']}</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="cells cell-left text-only">#{text['user.profile.tabs.limits.month']}</div>
+                                        <div class="cells cell-center highlighted text-only">#{currentUser.paymentLimits.getMonthLimitFormatted()}</div>
+                                        <div class="cells cell-right">
+                                            <h:outputText id="outputMonthLimit"
+                                                          value="#{empty currentUser.paymentLimits.monthLimitInEuro ? '0' : currentUser.paymentLimits.monthLimitInEuro} EUR"/>
+                                            <h:inputHidden id="newMonthLimitInEuro"
+                                                           value="#{profileViewController.newPaymentLimits.monthLimitInEuro}"/>
+                                            <p:slider for="newMonthLimitInEuro" display="outputMonthLimit"
+                                                      displayTemplate="{value} EUR" styleClass="slider" minValue="0"
+                                                      maxValue="1000" step="5"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="cells cell-left text-only">#{text['user.profile.tabs.limits.week']}</div>
+                                        <div class="cells cell-center highlighted text-only">#{currentUser.paymentLimits.getWeekLimitFormatted()}</div>
+                                        <div class="cells cell-right">
+                                            <h:outputText id="outputWeekLimit"
+                                                          value="#{empty currentUser.paymentLimits.weekLimitInEuro ? '0' : currentUser.paymentLimits.weekLimitInEuro} EUR"/>
+                                            <h:inputHidden id="weekLimitInEuro"
+                                                           value="#{profileViewController.newPaymentLimits.weekLimitInEuro}"/>
+                                            <p:slider for="weekLimitInEuro" display="outputWeekLimit"
+                                                      displayTemplate="{value} EUR" styleClass="slider" minValue="0"
+                                                      maxValue="1000" step="5"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="cells cell-left text-only">#{text['user.profile.tabs.limits.day']}</div>
+                                        <div class="cells cell-center highlighted text-only">#{currentUser.paymentLimits.getDayLimitFormatted()}</div>
+                                        <div class="cells cell-right">
+                                            <h:outputText id="outputDayLimit"
+                                                          value="#{empty currentUser.paymentLimits.dayLimitInEuro ? '0' : currentUser.paymentLimits.dayLimitInEuro} EUR"/>
+                                            <h:inputHidden id="dayLimitInEuro"
+                                                           value="#{profileViewController.newPaymentLimits.dayLimitInEuro}"/>
+                                            <p:slider for="dayLimitInEuro" display="outputDayLimit"
+                                                      displayTemplate="{value} EUR" styleClass="slider" minValue="0"
+                                                      maxValue="1000" step="5"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="row with-padding">
+                                        <p:commandButton icon="fa fa-money icon"
+                                                         id="changeLimitBtn"
+                                                         actionListener="#{profileViewController.changeLimits('tabs:limitsForm')}"
+                                                         value="#{text['user.profile.tabs.limits.set']}"
+                                                         update="@form"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </h:form>
+                    </p:tab>
+                    <p:tab title="#{text['user.profile.tabs.suspend']}">
+                        <h:panelGroup id="blockPlayerTab" layout="block" styleClass="suspend">
+                            <div class="form">
+
+                                <ui:fragment rendered="#{not currentUser.blocked}">
+                                    <div class="row">
+                                        #{text['user.profile.tabs.suspend.description.notbanned']}
+                                    </div>
+                                    <div class="row with-padding"/>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{currentUser.blocked}">
+                                    <div class="row">
+                                        #{text['user.profile.tabs.suspend.description.banned']}
+                                    </div>
+                                </ui:fragment>
+
+
+                                <h:form>
+                                    <div class="row with-padding">
+                                        <p:commandButton value="#{text['user.profile.tabs.suspend.suspend']}"
+                                                         icon="fa fa-ban icon"
+                                                         styleClass="red-button"
+                                                         rendered="#{not currentUser.blocked}">
+                                            <p:confirm header="#{text['user.profile.tabs.suspend.confirm_title']}"
+                                                       message="#{text['user.profile.tabs.suspend.confirm_message']}"/>
+                                        </p:commandButton>
+                                    </div>
+                                </h:form>
+                                <p:confirmDialog widgetVar="bpc" id="blockPlayerConfirm" global="true"
+                                                 styleClass="dialog">
+                                    <h:form>
+                                        <p:commandButton actionListener="#{profileViewController.blockAccount()}"
+                                                         value="#{text['user.profile.tabs.suspend.confirm_block']}"
+                                                         oncomplete="PF('bpc').hide()"
+                                                         update="tabs:blockPlayerTab"
+                                                         icon="fa fa-check"/>
+                                        <p:commandButton value="#{text['user.profile.tabs.suspend.confirm_cancel']}"
+                                                         oncomplete="PF('bpc').hide()"
+                                                         icon="fa fa-times icon"/>
+                                    </h:form>
+                                </p:confirmDialog>
+
+                            </div>
+                        </h:panelGroup>
+                    </p:tab>
+                    <p:tab title="#{text['user.profile.tabs.payments']}">
+                        <div class="transactions">
+                            <ui:fragment rendered="#{not empty profileViewController.paymentHistoryList}">
+                                <div class="table">
+                                    <div class="head">
+                                        <div class="column" style="width: 10%">
+                                            #{text['user.profile.tabs.payments.status']}
+                                        </div>
+                                        <div class="column" style="width: 23%">
+                                            #{text['user.profile.tabs.payments.paymentmethod']}
+                                        </div>
+                                        <div class="column" style="width: 23%">
+                                            #{text['user.profile.tabs.payments.date']}
+                                        </div>
+                                        <div class="column" style="width: 33%">
+                                            #{text['user.profile.tabs.payments.tickets']}
+                                        </div>
+                                        <div class="column" style="width: 10%">
+                                            #{text['user.profile.tabs.payments.price']}
+                                        </div>
+                                    </div>
+                                    <p:dataTable value="#{profileViewController.paymentHistoryList}" var="payment"
+                                                 rows="10"
+                                                 paginator="true"
+                                                 paginatorPosition="bottom"
+                                                 paginatorTemplate="{CurrentPageReport} {PageLinks}"
+                                                 currentPageReportTemplate="{startRecord}-{endRecord} #{text['user.profile.tabs.payments.pagereport']} {totalRecords}">
+                                        <p:column style="width: 10%">
+                                            <div class="status #{payment.transactionState}"/>
+                                        </p:column>
+                                        <p:column style="width: 20%">
+                                            <div class="#{payment.cardType.toString().toLowerCase()}"/>
+                                        </p:column>
+                                        <p:column style="width: 20%">
+                                            <h:outputText value="#{payment.payedAt}">
+                                                <f:converter converterId="zonedDateTimeConverter"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column style="width: 30%">
+                                            <ui:repeat value="#{payment.getTicketsFormatted(userSession.locale)}"
+                                                       var="ticket">
+                                                <h:outputText value="#{ticket}"/>
+                                            </ui:repeat>
+                                        </p:column>
+                                        <p:column style="width: 10%;">
+                                            <div style="width: auto; text-align: right; margin-right: 25%;">
+                                                <h:outputText value="#{payment.getPriceFormatted()}"/>
+                                            </div>
+                                        </p:column>
+                                    </p:dataTable>
+                                </div>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty profileViewController.paymentHistoryList}">
+                                #{text['user.profile.tabs.payments.empty']}
+                            </ui:fragment>
+                        </div>
+                    </p:tab>
+                    <p:tab title="#{text['user.profile.tabs.active_games']}">
+                        <div class="active-games">
+                            <ui:fragment rendered="#{not empty profileViewController.activeTicketList}">
+                                <div class="table">
+                                    <div class="head">
+                                        <div class="column" style="width: 10%">
+                                            #{text['user.profile.tabs.active_games.lottery']}
+                                        </div>
+                                        <div class="column" style="width: 20%">
+                                            #{text['user.profile.tabs.active_games.fields']}
+                                        </div>
+                                        <div class="column" style="width: 20%">
+                                            #{text['user.profile.tabs.active_games.ticketnumber']}
+                                        </div>
+                                        <div class="column" style="width: 20%">
+                                            #{text['user.profile.tabs.active_games.duration']}
+                                        </div>
+                                        <div class="column" style="width: 20%">
+                                            #{text['user.profile.tabs.active_games.additionalLotteries']}
+                                        </div>
+                                        <div class="column" style="width: 10%">
+                                            #{text['user.profile.tabs.active_games.details']}
+                                        </div>
+                                    </div>
+
+                                    <p:dataTable id="dataTableActiveTicketList"
+                                                 value="#{profileViewController.activeTicketList}" var="ticket"
+                                                 rows="10"
+                                                 paginator="true"
+                                                 paginatorPosition="bottom"
+                                                 paginatorTemplate="{CurrentPageReport} {PageLinks}"
+                                                 currentPageReportTemplate="{startRecord}-{endRecord} #{text['user.profile.tabs.payments.pagereport']} {totalRecords}">
+                                        <p:column style="width: 10%">
+                                            <div class="type #{ticket.lotteryIdentifier}"/>
+                                        </p:column>
+                                        <p:column style="width: 20%">
+                                            <h:outputText
+                                                    value="#{profileViewController.getAmountPlacedFields(ticket)} #{text['user.profile.tabs.active_games.chosenFields']}"/>
+                                        </p:column>
+                                        <p:column style="width: 20%">
+                                            <ui:repeat value="#{ticket.number}" var="digit">
+                                                <h:outputText value="#{digit}"/>
+                                            </ui:repeat>
+                                        </p:column>
+                                        <p:column style="width: 20%">
+                                            <ui:fragment rendered="#{ticket.permaTicket}">
+                                                <h:outputText value="&#8734;"/>
+                                            </ui:fragment>
+                                            <ui:fragment rendered="#{not ticket.permaTicket}">
+                                                <h:outputText value="#{ticket.startingDate}">
+                                                    <f:converter converterId="zonedDateTimeConverter"/>
+                                                    <f:attribute name="pattern" value="dd.MM.yyyy"/>
+                                                </h:outputText>
+                                                <h:outputText value=" - "/>
+                                                <h:outputText value="#{ticket.endingDate}">
+                                                    <f:converter converterId="zonedDateTimeConverter"/>
+                                                    <f:attribute name="pattern" value="dd.MM.yyyy"/>
+                                                </h:outputText>
+                                            </ui:fragment>
+                                        </p:column>
+                                        <p:column style="width: 20%">
+                                            <ui:fragment rendered="#{empty ticket.embeddedTickets}">
+                                                <h:outputText value="-"/>
+                                            </ui:fragment>
+                                            <ui:fragment rendered="#{not empty ticket.embeddedTickets}">
+                                                <div class="additionalGames">
+                                                    <ui:repeat value="#{ticket.embeddedTickets}" var="embeddedTicket">
+                                                        <div class="#{embeddedTicket.lotteryIdentifier}"/>
+                                                    </ui:repeat>
+                                                </div>
+                                            </ui:fragment>
+                                        </p:column>
+                                        <p:column style="width: 10%">
+                                            <p:rowToggler/>
+                                        </p:column>
+                                        <p:rowExpansion>
+                                            <lottery:details6aus49 ticket="#{ticket}"
+                                                                   rendered="#{ticket.lotteryIdentifier eq 'german6aus49'}"/>
+                                            <lottery:detailsGluecksspirale ticket="#{ticket}"
+                                                                           rendered="#{ticket.lotteryIdentifier eq 'gluecksspirale'}"/>
+                                            <lottery:detailsEuroJackpot ticket="#{ticket}"
+                                                                        rendered="#{ticket.lotteryIdentifier eq 'euroJackpot'}"/>
+                                            <lottery:detailsKeno ticket="#{ticket}"
+                                                                 rendered="#{ticket.lotteryIdentifier eq 'keno'}"/>
+                                        </p:rowExpansion>
+                                    </p:dataTable>
+                                </div>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty profileViewController.activeTicketList}">
+                                #{text['user.profile.tabs.active_games.empty']}
+                            </ui:fragment>
+                        </div>
+                    </p:tab>
+                    <p:tab title="#{text['user.profile.tabs.game_history']}">
+                        <div class="game-history">
+                            <ui:fragment rendered="#{not empty profileViewController.ticketHistoryList}">
+                                <div class="table">
+                                    <div class="head">
+                                        <div class="column" style="width: 10%">
+                                            #{text['user.profile.tabs.game_history.lottery']}
+                                        </div>
+                                        <div class="column" style="width: 20%">
+                                            #{text['user.profile.tabs.game_history.drawing']}
+                                        </div>
+                                        <div class="column" style="width: 20%">
+                                            #{text['user.profile.tabs.game_history.fields']}
+                                        </div>
+                                        <div class="column" style="width: 20%">
+                                            #{text['user.profile.tabs.game_history.ticketnumber']}
+                                        </div>
+                                        <div class="column" style="width: 20%">
+                                            #{text['user.profile.tabs.game_history.additionalLotteries']}
+                                        </div>
+                                        <div class="column" style="width: 10%">
+                                            #{text['user.profile.tabs.game_history.details']}
+                                        </div>
+                                    </div>
+
+                                    <p:dataTable value="#{profileViewController.ticketHistoryList}" var="ticketEntry"
+                                                 rows="10"
+                                                 paginator="true"
+                                                 paginatorPosition="bottom"
+                                                 paginatorTemplate="{CurrentPageReport} {PageLinks}"
+                                                 currentPageReportTemplate="{startRecord}-{endRecord} #{text['user.profile.tabs.payments.pagereport']} {totalRecords}">
+                                        <p:column style="width: 10%">
+                                            <div class="type #{ticketEntry.mainTicket.lotteryIdentifier}"/>
+                                        </p:column>
+                                        <p:column style="width: 20%">
+                                            <h:outputText
+                                                    value="#{ticketEntry.getDrawingForTicket(ticketEntry.mainTicket.lotteryIdentifier).date}">
+                                                <f:converter converterId="zonedDateTimeConverter"/>
+                                                <f:attribute name="pattern" value="dd.MM.yyyy"/>
+                                            </h:outputText>
+                                        </p:column>
+                                        <p:column style="width: 20%">
+                                            <h:outputText
+                                                    value="#{profileViewController.getAmountPlacedFields(ticketEntry.mainTicket)} #{text['user.profile.tabs.game_history.chosenFields']}"/>
+                                        </p:column>
+                                        <p:column style="width: 20%">
+                                            <ui:repeat value="#{ticketEntry.mainTicket.number}" var="digit">
+                                                <h:outputText value="#{digit}"/>
+                                            </ui:repeat>
+                                        </p:column>
+                                        <p:column style="width: 20%">
+                                            <ui:fragment rendered="#{empty ticketEntry.mainTicket.embeddedTickets}">
+                                                <h:outputText value="-"/>
+                                            </ui:fragment>
+                                            <ui:fragment rendered="#{not empty ticketEntry.mainTicket.embeddedTickets}">
+                                                <div class="additionalGames">
+                                                    <ui:repeat value="#{ticketEntry.mainTicket.embeddedTickets}"
+                                                               var="embeddedTicket">
+                                                        <div class="#{embeddedTicket.lotteryIdentifier}"/>
+                                                    </ui:repeat>
+                                                </div>
+                                            </ui:fragment>
+                                        </p:column>
+                                        <p:column style="width: 10%">
+                                            <p:rowToggler/>
+                                        </p:column>
+
+                                        <p:rowExpansion>
+                                            <results:results6aus49 resultHistoryWrapper="#{ticketEntry}"
+                                                                   rendered="#{ticketEntry.mainTicket.lotteryIdentifier eq 'german6aus49'}"/>
+                                            <results:resultsGluecksspirale resultHistoryWrapper="#{ticketEntry}"
+                                                                           rendered="#{ticketEntry.mainTicket.lotteryIdentifier eq 'gluecksspirale'}"/>
+                                            <results:resultsEuroJackpot resultHistoryWrapper="#{ticketEntry}"
+                                                                        rendered="#{ticketEntry.mainTicket.lotteryIdentifier eq 'euroJackpot'}"/>
+                                        </p:rowExpansion>
+
+                                    </p:dataTable>
+                                </div>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{empty profileViewController.ticketHistoryList}">
+                                #{text['user.profile.tabs.game_history.empty']}
+                            </ui:fragment>
+                        </div>
+                    </p:tab>
+                </p:tabView>
+            </div>
+        </section>
+    </ui:define>
+</ui:composition>

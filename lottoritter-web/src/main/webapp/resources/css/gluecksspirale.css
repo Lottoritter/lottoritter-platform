@@ -1,0 +1,389 @@
+/* Compact */
+/* ----------- Ticketnumber ----------- */
+.ticket {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                          supported by Chrome and Opera */
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  background: rgba(243, 242, 242, 0.9);
+  height: 350px;
+  position: relative; }
+  .ticket .ticketNumber {
+    color: #bbb;
+    font-weight: 400;
+    float: left;
+    z-index: 10; }
+    .ticket .ticketNumber .digit {
+      color: #919191;
+      width: 45px;
+      height: 22px;
+      padding: 7px;
+      position: relative;
+      font-size: 20px;
+      text-align: center;
+      line-height: 22px;
+      border-left: 1px solid #afafaf;
+      border-right: 1px solid #afafaf;
+      border-top: 0;
+      border-bottom: 0;
+      float: left;
+      background-color: white;
+      cursor: pointer; }
+    .ticket .ticketNumber .number {
+      width: 60px;
+      float: left; }
+    .ticket .ticketNumber .random {
+      float: left;
+      width: 40px;
+      background: #f9f9f9;
+      border: 1px solid #afafaf;
+      border-radius: 5px;
+      margin-left: 15px;
+      height: 98px;
+      position: relative; }
+      .ticket .ticketNumber .random div {
+        position: absolute;
+        left: 5px;
+        top: 33px;
+        color: #919191; }
+      .ticket .ticketNumber .random:hover {
+        background: #f1f1f1;
+        border: 1px solid #afafaf; }
+      .ticket .ticketNumber .random:active {
+        color: #919191;
+        border: 1px solid #919191;
+        background: white; }
+    .ticket .ticketNumber .arrow {
+      padding: 7px;
+      text-align: center;
+      width: 45px; }
+    .ticket .ticketNumber .arrowup-first {
+      -moz-border-radius-topleft: 5px;
+      -webkit-border-top-left-radius: 5px;
+      border-top-left-radius: 5px;
+      -moz-border-radius-topright: 0;
+      -webkit-border-top-right-radius: 0;
+      border-top-right-radius: 0;
+      -moz-border-radius-bottomleft: 0;
+      -webkit-border-bottom-left-radius: 0;
+      border-bottom-left-radius: 0;
+      -moz-border-radius-bottomright: 0;
+      -webkit-border-bottom-right-radius: 0;
+      border-bottom-right-radius: 0; }
+    .ticket .ticketNumber .arrowup {
+      -moz-border-radius: 0;
+      -webkit-border-radius: 0;
+      border-radius: 0; }
+    .ticket .ticketNumber .arrowup-last {
+      -moz-border-radius-topleft: 0;
+      -webkit-border-top-left-radius: 0;
+      border-top-left-radius: 0;
+      -moz-border-radius-topright: 5px;
+      -webkit-border-top-right-radius: 5px;
+      border-top-right-radius: 5px;
+      -moz-border-radius-bottomleft: 0;
+      -webkit-border-bottom-left-radius: 0;
+      border-bottom-left-radius: 0;
+      -moz-border-radius-bottomright: 0;
+      -webkit-border-bottom-right-radius: 0;
+      border-bottom-right-radius: 0; }
+    .ticket .ticketNumber .arrowdown-first {
+      -moz-border-radius-topleft: 0;
+      -webkit-border-top-left-radius: 0;
+      border-top-left-radius: 0;
+      -moz-border-radius-topright: 0;
+      -webkit-border-top-right-radius: 0;
+      border-top-right-radius: 0;
+      -moz-border-radius-bottomleft: 5px;
+      -webkit-border-bottom-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+      -moz-border-radius-bottomright: 0;
+      -webkit-border-bottom-right-radius: 0;
+      border-bottom-right-radius: 0; }
+    .ticket .ticketNumber .arrowdown {
+      -moz-border-radius: 0;
+      -webkit-border-radius: 0;
+      border-radius: 0; }
+    .ticket .ticketNumber .arrowdown-last {
+      -moz-border-radius-topleft: 0;
+      -webkit-border-top-left-radius: 0;
+      border-top-left-radius: 0;
+      -moz-border-radius-topright: 0;
+      -webkit-border-top-right-radius: 0;
+      border-top-right-radius: 0;
+      -moz-border-radius-bottomleft: 0;
+      -webkit-border-bottom-left-radius: 0;
+      border-bottom-left-radius: 0;
+      -moz-border-radius-bottomright: 5px;
+      -webkit-border-bottom-right-radius: 5px;
+      border-bottom-right-radius: 5px; }
+  .ticket .background {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    background: url("#{resource['svg:gluecksspirale_icon_colored.svg']}") no-repeat center;
+    background-size: 80%; }
+
+.options {
+  padding: 4px;
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                          supported by Chrome and Opera */
+  /* ----------- Options ----------- */
+  /* ----------- Next Drawing ----------- */
+  /* ----------- Duration ----------- */
+  /* ----------- Checkout ----------- */ }
+  .options .wrapper {
+    padding: 2px;
+    float: right;
+    margin-right: 50px; }
+  .options .ticketNumber {
+    color: #bbb;
+    font-weight: 400;
+    float: left;
+    z-index: 10; }
+    .options .ticketNumber .digit {
+      color: #919191;
+      width: 22px;
+      height: 22px;
+      padding: 7px;
+      position: relative;
+      font-size: 20px;
+      text-align: center;
+      line-height: 22px;
+      border: 1px solid #afafaf;
+      float: left;
+      background-color: white;
+      cursor: pointer; }
+    .options .ticketNumber .number {
+      width: 37px;
+      float: left; }
+  .options .optionHeader {
+    color: #c90713;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 15px 15px 15px 0; }
+  .options .next-drawing {
+    float: left; }
+    .options .next-drawing .text {
+      font-size: 20px;
+      border: 1px solid;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      padding: 7px; }
+  .options .duration {
+    width: 282px;
+    color: #bbb;
+    font-weight: 400;
+    float: left; }
+    .options .duration .durationbox input[type=radio] {
+      position: absolute;
+      visibility: hidden; }
+    .options .duration .permaticket {
+      margin-top: 15px;
+      float: left;
+      position: relative; }
+      .options .duration .permaticket .checkbox-container {
+        width: 37px;
+        height: 37px; }
+        .options .duration .permaticket .checkbox-container label {
+          width: 36px;
+          height: 36px; }
+          .options .duration .permaticket .checkbox-container label:after {
+            width: 22px;
+            height: 10px;
+            top: 7px;
+            left: 5px; }
+      .options .duration .permaticket .text {
+        position: absolute;
+        line-height: 39px;
+        left: 39px;
+        top: 0;
+        margin-left: 8px;
+        font-size: 22px; }
+    .options .duration .durationbox {
+      float: left;
+      color: #bbb;
+      position: relative;
+      height: 39px;
+      width: 39px;
+      display: inline;
+      margin-right: 8px; }
+      .options .duration .durationbox label {
+        text-align: center;
+        line-height: 39px;
+        width: 39px;
+        display: block;
+        position: absolute;
+        font-weight: 400;
+        font-size: 22px;
+        cursor: pointer;
+        z-index: 9; }
+      .options .duration .durationbox .check {
+        display: block;
+        position: absolute;
+        border-radius: 100%;
+        border: 1px solid #bbb;
+        height: 37px;
+        width: 37px;
+        z-index: 5; }
+        .options .duration .durationbox .check::before {
+          display: block;
+          position: absolute;
+          content: '';
+          height: 37px;
+          width: 37px;
+          margin: auto;
+          border-radius: 100%;
+          top: 5px;
+          left: 5px; }
+      .options .duration .durationbox input[type=radio]:checked ~ .check::before {
+        background: #bfbfbf;
+        width: 27px;
+        height: 27px; }
+      .options .duration .durationbox input[type=radio]:checked ~ label {
+        color: white; }
+  .options .checkout {
+    width: 260px;
+    color: #bbb;
+    font-weight: 400;
+    float: left; }
+    .options .checkout .checkoutbutton {
+      cursor: pointer;
+      padding: 15px;
+      background: #4CAF50;
+      border: 1px solid #4CAF50;
+      border-radius: 5px;
+      color: white;
+      height: 40px; }
+      .options .checkout .checkoutbutton:active {
+        cursor: pointer;
+        padding: 15px;
+        background: white;
+        border: 1px solid #4CAF50;
+        border-radius: 5px;
+        color: #4CAF50;
+        height: 40px; }
+      .options .checkout .checkoutbutton .carticon {
+        float: left;
+        background: #2E7D32;
+        width: 40px;
+        height: 40px;
+        border: 1px solid #2E7D32;
+        border-radius: 100%; }
+        .options .checkout .checkoutbutton .carticon i {
+          width: 37px;
+          text-align: center;
+          color: white; }
+          .options .checkout .checkoutbutton .carticon i::before {
+            font-size: 30px;
+            line-height: 40px;
+            text-align: center; }
+      .options .checkout .checkoutbutton .carttext {
+        float: left;
+        font-size: 25px;
+        line-height: 40px;
+        margin-left: 8px; }
+    .options .checkout .pricetable {
+      margin: 0 5px 0 5px;
+      padding-bottom: 8px; }
+      .options .checkout .pricetable .item {
+        line-height: 30px;
+        height: 30px;
+        border: 0 solid #bbb;
+        border-bottom-width: 1px; }
+        .options .checkout .pricetable .item:last-child {
+          border: none;
+          color: #2E7D32; }
+        .options .checkout .pricetable .item .name {
+          float: left; }
+        .options .checkout .pricetable .item .price {
+          float: right; }
+          .options .checkout .pricetable .item .price div {
+            float: left; }
+          .options .checkout .pricetable .item .price i {
+            float: left;
+            line-height: 30px;
+            margin-left: 5px; }
+
+.ticket-header {
+  padding: 15px 30px 15px 30px;
+  height: 35px;
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                          supported by Chrome and Opera */ }
+  .ticket-header .jackpot-text {
+    float: left;
+    color: #c90713;
+    font-size: 35px;
+    line-height: 35px; }
+    .ticket-header .jackpot-text span {
+      font-size: 40px;
+      font-weight: bold; }
+  .ticket-header .next-drawing-text {
+    float: right;
+    font-size: 20px;
+    color: #656565;
+    line-height: 24px;
+    text-align: center; }
+    .ticket-header .next-drawing-text div {
+      display: inline-block;
+      position: relative;
+      border: 1px solid #656565;
+      padding: 5px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      width: 37px;
+      height: 25px; }
+      .ticket-header .next-drawing-text div .key {
+        position: absolute;
+        font-size: 12px;
+        padding: 0;
+        border: 0;
+        bottom: -6px;
+        left: 6px;
+        background: white;
+        border-radius: 0;
+        line-height: 10px; }

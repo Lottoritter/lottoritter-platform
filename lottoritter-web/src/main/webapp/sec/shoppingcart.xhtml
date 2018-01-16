@@ -1,0 +1,603 @@
+<!--
+    * Copyright 2017 Ulrich Cech & Christopher Schmidt
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * You should have received a copy of the GNU General Public License
+    * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    */
+-->
+<!--
+* @author Christopher Schmidt
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:lottery="http://java.sun.com/jsf/composite/lottery/details"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            var PAYMILL_PUBLIC_KEY = '09278263624709ef23a006cd4366011c';
+        </script>
+        <h:outputScript name="js/iban.js" library=""/>
+        <script type="text/javascript" src="https://bridge.paymill.com/"/>
+
+        <script type="text/javascript">
+            var options = {
+                lang: "#{userSession.locale}"
+            };
+
+            var callback = function (error) {
+                //Frame could not be loaded, check error object for reason
+                if (error) {
+                    console.log(error.apierror, error.message);
+                    // Example: "container_not_found"
+                }
+                //Frame was loaded successfully
+                else {
+                }
+            };
+
+            var showCC = function (elem) {
+                $(elem).siblings('div').removeClass('selected');
+                $(elem).addClass('selected');
+
+                if ($(elem).hasClass('visa')) {
+                    $('.jsArrowMasterCard').hide();
+                    $('.jsArrowVisa').show();
+                } else {
+                    $('.jsArrowMasterCard').show();
+                    $('.jsArrowVisa').hide();
+                }
+                $('.jsArrowSepa').hide();
+
+                $('#paymentNewCreditCard').show();
+                $('#paymentNewSEPA').hide();
+                paymill.embedFrame('credit-card-fields', options, callback);
+                document.getElementById('paymentNewCreditCardPayBtn').style.visibility = "";
+            };
+
+            var showSepa = function (elem) {
+                $("#sepa-payment-form\\:ibanString").val('');
+                $("#sepa-payment-form\\:bicString").val('');
+
+                $(elem).siblings('div').removeClass('selected');
+                $('.jsArrowMasterCard').hide();
+                $('.jsArrowVisa').hide();
+                $('.jsArrowSepa').show();
+                $(elem).addClass('selected');
+
+                $('#paymentNewCreditCard').hide();
+                $('#paymentNewSEPA').show();
+            };
+
+            var submitCCForm = function () {
+                paymill.createTokenViaFrame({
+                        amount_int: #{shoppingCartViewController.getTotalPriceInCent()}, // 420 for 4.20 amount_int hast to be an integer, required
+                        currency: '#{shoppingCartViewController.getTotalPriceCurrency()}', // required
+                        email: '#{currentUser.email}' //required
+                    },
+                    function (error, result) {
+                        // Handle error or process result.
+                        if (error) {
+                            // Token could not be created, check error object for reason.
+                            console.log(error.apierror, error.message);
+
+                            if (error.apierror === 'unknown_error') {
+                                showError(error.apierror, error.message, 'Bitte versuchen Sie es später noch einmal');
+                            }
+                        }
+                        // Token was created successfully and can be sent to backend.
+                        else {
+                            // If you want to log the response in the console
+                            console.log(result.token);
+                            // Fetch the token, and add it to the form, which is then submitted to your server
+                            var form = document.getElementById("payment-form");
+                            var tokenField = document.getElementById("payment-form:paymillToken");
+                            tokenField.value = result.token;
+                            document.getElementById("payment-form:createNewPaymentBtn").click();
+                            var btn = $('#payWithSepaBtn');
+                            btn.attr("disabled", "disabled");
+                            btn.addClass("disabled");
+                        }
+                    }
+                );
+            }
+
+        </script>
+        <script type="text/javascript">
+            var submitSepaForm = function () {
+                var ibanValue = $("#sepa-payment-form\\:ibanString").val();
+                var bicValue = $("#sepa-payment-form\\:bicString").val();
+                var accountHolderValue = "#{currentUser.email}";
+                paymill.createToken({
+                    iban: ibanValue,
+                    bic: bicValue,
+                    accountholder: accountHolderValue
+                }, function (error, result) {
+                    // Handle error or process result.
+                    if (error) {
+                        // Token could not be created, check error object for reason.
+                        console.log(error.apierror, error.message);
+                        showError(error.apierror, error.message, 'Bitte versuchen Sie es später noch einmal');
+                    }
+                    // Token was created successfully and can be sent to backend.
+                    else {
+                        // If you want to log the response in the console
+                        console.log(result.token);
+                        // Fetch the token, and add it to the form, which is then submitted to your server
+                        $("#sepa-payment-form\\:paymillTokenSepa").val(result.token);
+                        $("#sepa-payment-form\\:createNewSepaPaymentBtn").click();
+                        var btn = $('#payWithSepaBtn');
+                        btn.attr("disabled", "disabled");
+                        btn.addClass("disabled");
+                    }
+                });
+            };
+
+        </script>
+
+        <script type="text/javascript">
+            var messages = {
+                'user.shoppingcart.payment.createnew.sepa.iban.error.what': "#{text['user.shoppingcart.payment.createnew.sepa.iban.error.what']}",
+                'user.shoppingcart.payment.createnew.sepa.iban.error.why': "#{text['user.shoppingcart.payment.createnew.sepa.iban.error.why']}",
+                'user.shoppingcart.payment.createnew.sepa.iban.error.howtosolve': "#{text['user.shoppingcart.payment.createnew.sepa.iban.error.howtosolve']}"
+            };
+
+            var checkIBAN = function () {
+                var iban = $('#sepa-payment-form\\:ibanString').val();
+
+                if (iban !== '') {
+                    if (!IBAN.isValid(iban)) {
+                        var what = messages['user.shoppingcart.payment.createnew.sepa.iban.error.what'];
+                        var why = messages['user.shoppingcart.payment.createnew.sepa.iban.error.why'];
+                        var howtosolve = messages['user.shoppingcart.payment.createnew.sepa.iban.error.howtosolve'];
+                        showError(what, why, howtosolve);
+                    }
+                }
+            }
+        </script>
+
+        <script type="text/javascript">
+
+            var selectPaymentMethod = function (elem, externalId) {
+                $(elem).siblings().children('i').hide();
+                $(elem).children('i').show();
+                $(elem).addClass('selected');
+                $(elem).siblings().each(function () {
+                    $(this).removeClass('selected');
+                });
+                var hiddenField = document.getElementById("paymentFormExisting:selectedPaymentMethod");
+                hiddenField.value = externalId;
+            };
+
+            var submitExistingPayment = function () {
+                var hiddenField = document.getElementById("paymentFormExisting:selectedPaymentMethod");
+                if (hiddenField.value !== '') {
+                    document.getElementById("paymentFormExisting:buyBtn").click();
+                    var submitBtn = $('#existingPaymentBtn');
+                    submitBtn.attr("disabled", "disabled");
+                    submitBtn.addClass("disabled");
+                }
+            };
+        </script>
+
+    </ui:define>
+
+
+    <ui:define name="content">
+        <section class="content no-header">
+            <div class="shoppingcart">
+                <h:panelGroup id="shoppingcartGroup" layout="block">
+                    <h1>#{text['user.shoppingcart.title']}</h1>
+                    <ui:fragment rendered="#{not empty shoppingCartViewController.tickets}">
+
+
+                        <div class="tickets">
+                            <div class="table">
+                                <div class="head">
+                                    <div class="column" style="width: 5%"/>
+                                    <div class="column" style="width: 10%">
+                                        #{text['user.shoppingcart.ticket.lottery']}
+                                    </div>
+                                    <div class="column" style="width: 10%">
+                                        #{text['user.shoppingcart.ticket.fields']}
+                                    </div>
+                                    <div class="column" style="width: 10%">
+                                        #{text['user.shoppingcart.ticket.ticketnumber']}
+                                    </div>
+                                    <div class="column" style="width: 20%">
+                                        #{text['user.shoppingcart.ticket.duration']}
+                                    </div>
+                                    <div class="column" style="width: 20%">
+                                        #{text['user.shoppingcart.ticket.additionalGames']}
+                                    </div>
+                                    <div class="column" style="width: 10%">
+                                        #{text['user.shoppingcart.ticket.details']}
+                                    </div>
+                                    <div class="column" style="width: 15%">
+                                        #{text['user.shoppingcart.ticket.price']}
+                                    </div>
+                                </div>
+                                <h:form>
+                                    <p:dataTable value="#{shoppingCartViewController.tickets}" var="ticket"
+                                                 rows="100"
+                                                 paginatorAlwaysVisible="false"
+                                                 paginator="true"
+                                                 paginatorPosition="bottom"
+                                                 paginatorTemplate="{CurrentPageReport} {PageLinks}"
+                                                 currentPageReportTemplate="{startRecord}-{endRecord} #{text['user.profile.tabs.payments.pagereport']} {totalRecords}">
+                                        <p:column style="width: 5%">
+                                            <p:commandButton icon="fa fa-trash-o" styleClass="removeticket"
+                                                             actionListener="#{shoppingCartViewController.removeTicket(ticket)}"
+                                                             update=":shoppingcartGroup :headerShoppingCart :payment-container"/>
+                                        </p:column>
+                                        <p:column style="width: 10%">
+                                            <div class="type #{ticket.lotteryIdentifier}"/>
+                                        </p:column>
+                                        <p:column style="width: 10%">
+                                            <h:outputText value="#{shoppingCartViewController.getAmountPlacedFields(ticket)} #{text['user.shoppingcart.ticket.fields']}"/>
+                                        </p:column>
+                                        <p:column style="width: 10%">
+                                            <ui:repeat value="#{ticket.number}" var="digit">
+                                                <h:outputText value="#{digit}"/>
+                                            </ui:repeat>
+                                        </p:column>
+                                        <p:column style="width: 20%">
+                                            <ui:fragment rendered="#{ticket.permaTicket}">
+                                                <h:outputText value="&#8734;"/>
+                                            </ui:fragment>
+                                            <ui:fragment rendered="#{not ticket.permaTicket}">
+                                                <h:outputText value="#{ticket.startingDate}">
+                                                    <f:converter converterId="zonedDateTimeConverter"/>
+                                                    <f:attribute name="pattern" value="dd.MM.yyyy"/>
+                                                </h:outputText>
+                                                <h:outputText value=" - "/>
+                                                <h:outputText value="#{ticket.endingDate}">
+                                                    <f:converter converterId="zonedDateTimeConverter"/>
+                                                    <f:attribute name="pattern" value="dd.MM.yyyy"/>
+                                                </h:outputText>
+                                            </ui:fragment>
+                                        </p:column>
+                                        <p:column style="width: 20%">
+                                            <h:outputText rendered="#{empty ticket.lottery.possibleAdditionalLotteries}" value="-"/>
+                                            <h:panelGroup styleClass="additionalGames" rendered="#{not empty ticket.lottery.possibleAdditionalLotteries}">
+                                                <ui:repeat id="additionalLotteries"
+                                                           value="#{ticket.lottery.possibleAdditionalLotteries}"
+                                                           var="lottery">
+                                                    <p:commandLink
+                                                            actionListener="#{shoppingCartViewController.toggleAdditionalLottery(ticket, lottery)}"
+                                                            rendered="#{ticket.getEmbeddedTicket(lottery) != null}"
+                                                            styleClass="#{lottery}-cart"
+                                                            update="@form totalprice :headerShoppingCart"/>
+                                                    <p:commandLink
+                                                            actionListener="#{shoppingCartViewController.toggleAdditionalLottery(ticket, lottery)}"
+                                                            rendered="#{ticket.getEmbeddedTicket(lottery) == null}"
+                                                            styleClass="#{lottery}-cart not-selected"
+                                                            update="@form totalprice :headerShoppingCart"/>
+                                                </ui:repeat>
+                                            </h:panelGroup>
+                                        </p:column>
+                                        <p:column style="width: 10%">
+                                            <p:rowToggler/>
+                                        </p:column>
+                                        <p:column style="width: 15%">
+                                            <div class="price-cart">
+                                                <h:outputText id="priceForTicket"
+                                                              value="#{shoppingCartViewController.getPriceFormatted(ticket.totalTicketPrice)}"/>
+                                            </div>
+                                        </p:column>
+
+                                        <p:rowExpansion>
+                                            <lottery:details6aus49 ticket="#{ticket}"
+                                                                   rendered="#{ticket.lotteryIdentifier eq 'german6aus49'}" shoppingcart="true"/>
+                                            <lottery:detailsGluecksspirale ticket="#{ticket}"
+                                                                   rendered="#{ticket.lotteryIdentifier eq 'gluecksspirale'}" shoppingcart="true"/>
+                                            <lottery:detailsEuroJackpot ticket="#{ticket}"
+                                                                        rendered="#{ticket.lotteryIdentifier eq 'euroJackpot'}" shoppingcart="true"/>
+                                            <lottery:detailsKeno ticket="#{ticket}"
+                                                                        rendered="#{ticket.lotteryIdentifier eq 'keno'}" shoppingcart="true"/>
+                                        </p:rowExpansion>
+                                    </p:dataTable>
+                                </h:form>
+                            </div>
+
+                            <div style="margin-top: 15px;border: 0 solid;border-bottom-width: 1px;"/>
+
+                            <div class="totalprice">
+                                <div class="text">#{text['user.shoppingcart.totalprice']}</div>
+                                <h:outputText id="totalprice"
+                                              value="#{shoppingCartViewController.totalPriceFormatted}"/>
+                            </div>
+                        </div>
+
+                        <h:panelGroup rendered="#{currentUser.blocked}">
+                            <div class="ui-messages ui-messages-noicon ui-widget" aria-live="polite"
+                                 style="width: 100%;">
+                                <div class="ui-messages-info ui-corner-all">
+                                    <ul>
+                                        <li>
+                                            <span class="ui-messages-info-summary">#{text['user.shoppingcart.blocked']}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </h:panelGroup>
+
+                        <h:panelGroup styleClass="payment" id="payment-container" layout="block"
+                                      rendered="#{not currentUser.blocked}">
+                            <h:panelGroup id="uceContainer"
+                                          rendered="#{shoppingCartViewController.isPaymentInLimitForPlayer()}">
+                                <div class="payment-header">
+                                    <h:panelGroup
+                                            class="tab-header left #{shoppingCartViewController.isCreateNewPaymentSelected() ? '' : 'selected'}"
+                                            layout="block">
+                                        <h:form>
+                                            <p:commandButton
+                                                    disabled="#{not shoppingCartViewController.createNewPaymentSelected or empty currentUser.getPaymentServiceProviderWithCode(shoppingCartViewController.getPrimaryPSP()).playerPaymentList}"
+                                                    actionListener="#{shoppingCartViewController.selectUseExistingPaymentTab}"
+                                                    value="#{text['user.shoppingcart.payment.useexisting.title']}"
+                                                    update="payment-container"
+                                                    style="border-top-left-radius: 5px"
+                                                    styleClass="#{shoppingCartViewController.isCreateNewPaymentSelected() ? '' : 'selected'}">
+                                            </p:commandButton>
+                                        </h:form>
+                                    </h:panelGroup>
+                                    <h:panelGroup
+                                            class="tab-header right #{shoppingCartViewController.isCreateNewPaymentSelected() ? 'selected' : ''}"
+                                            layout="block">
+                                        <h:form>
+                                            <p:commandButton
+                                                    actionListener="#{shoppingCartViewController.selectCreateNewPaymentTab}"
+                                                    value="#{text['user.shoppingcart.payment.createnew.title']}"
+                                                    disabled="#{shoppingCartViewController.createNewPaymentSelected || shoppingCartViewController.primaryPSP == 'NO_OP'}"
+                                                    update="payment-container"
+                                                    style="border-top-right-radius: 5px"
+                                                    styleClass="#{shoppingCartViewController.isCreateNewPaymentSelected() ? 'selected' : ''}">
+                                            </p:commandButton>
+                                        </h:form>
+                                    </h:panelGroup>
+                                </div>
+
+                                <div class="tab-content">
+                                    <h:panelGroup id="tab-content-new-payment"
+                                                  rendered="#{shoppingCartViewController.createNewPaymentSelected}"
+                                                  class="new-payment" layout="block">
+
+                                        <div class="new-payment-selection">
+                                            <div class="visa" onclick="showCC(this)">
+                                                <i class="fa fa-arrow-right jsArrowVisa"/>
+                                            </div>
+                                            <div class="mastercard" onclick="showCC(this)">
+                                                <i class="fa fa-arrow-right jsArrowMasterCard"/>
+                                            </div>
+                                            <div class="sepa selected" onclick="showSepa(this)">
+                                                <i class="fa fa-arrow-right jsArrowSepa"/>
+                                            </div>
+                                        </div>
+
+                                        <h:panelGroup class="new-payment-details" id="new-payment-details"
+                                                      layout="block">
+                                            <h:panelGroup id="paymentNewCreditCard" layout="block">
+
+                                                <div class="form single-column-form" style="width: 400px">
+
+                                                    <h:form id="payment-form" method="post"
+                                                            rendered="#{not shoppingCartViewController.isPaymillTokenExists()}">
+
+                                                        <div class="row">
+                                                            <div id="credit-card-fields" style="width: 400px"/>
+                                                        </div>
+
+                                                        <div class="row with-padding"/>
+
+                                                        <p:inputText id="paymillToken" name="paymillToken"
+                                                                     value="#{shoppingCartViewController.paymillToken}"
+                                                                     type="hidden"/>
+                                                        <p:commandButton style="visibility: hidden; display: none"
+                                                                         id="createNewPaymentBtn"
+                                                                         value="Bezahlen"
+                                                                         update="paymentNewCreditCard globalMessages"
+                                                                         ajax="false"
+                                                                         action="#{shoppingCartViewController.submitNewPlayerPayment('payment-form', 'createNewPaymentBtn', 'CREDITCARD')}"/>
+                                                    </h:form>
+                                                </div>
+
+                                                <h:panelGroup id="paymentNewCreditCardPayBtn">
+                                                    <button id="payWithCCBtn" onclick="submitCCForm()"
+                                                            class="submitButton">
+                                                        <span class="fa fa-shopping-bag"
+                                                              style="margin-left: 10px; float: left"/>
+                                                        <span class="text">#{text['user.shoppingcart.payment.createnew.cc.purchase']}</span>
+                                                    </button>
+                                                </h:panelGroup>
+                                            </h:panelGroup>
+
+
+                                            <h:panelGroup id="paymentNewSEPA" layout="block">
+
+                                                <div class="form single-column-form">
+
+                                                    <h:form id="sepa-payment-form">
+                                                        <div class="row">
+                                                            <h:panelGroup>
+                                                                #{text['user.shoppingcart.payment.createnew.sepa.iban']}
+                                                                <p:inputText id="ibanString"
+                                                                             value="#{shoppingCartViewController.ibanString}"
+                                                                             onblur="checkIBAN()">
+                                                                    <p:ajax process="sepa-payment-form:ibanString"
+                                                                            event="blur"
+                                                                            listener="#{shoppingCartViewController.fillBIC}"
+                                                                            update="sepa-payment-form:bicString"/>
+                                                                </p:inputText>
+                                                            </h:panelGroup>
+                                                        </div>
+                                                        <div class="row with-padding">
+                                                            <p:message for="ibanString" display="text"/>
+                                                        </div>
+                                                        <div class="row">
+                                                            #{text['user.shoppingcart.payment.createnew.sepa.bic']}
+                                                            <p:inputText id="bicString"
+                                                                         value="#{shoppingCartViewController.bicString}"/>
+                                                        </div>
+                                                        <div class="row with-padding">
+                                                            <p:message for="bicString" display="text"/>
+                                                            <p:message for="createNewSepaPaymentBtn"/>
+                                                        </div>
+
+                                                        <p:inputText id="paymillTokenSepa" name="paymillTokenSepa"
+                                                                     value="#{shoppingCartViewController.paymillTokenSepa}"
+                                                                     type="hidden"/>
+                                                        <p:commandButton style="visibility: hidden; display: none"
+                                                                         id="createNewSepaPaymentBtn"
+                                                                         value="Bezahlen"
+                                                                         update="paymentNewSEPA globalErrors"
+                                                                         action="#{shoppingCartViewController.submitNewPlayerPayment('sepa-payment-form', 'createNewSepaPaymentBtn', 'SEPA')}"/>
+                                                    </h:form>
+                                                </div>
+                                                <h:panelGroup id="paymentNewSepaPayBtn" layout="block">
+                                                    <button id="payWithSepaBtn" onclick="submitSepaForm()"
+                                                            class="submitButton">
+                                                    <span class="fa fa-shopping-bag"
+                                                          style="margin-left: 10px; float: left"/>
+                                                        <span class="text">#{text['user.shoppingcart.payment.createnew.sepa.purchase']}</span>
+                                                    </button>
+                                                </h:panelGroup>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+
+
+                                        <script type="text/javascript">
+                                            $(document).ready(function () {
+                                                $('.sepa').click();
+                                            });
+                                        </script>
+                                    </h:panelGroup>
+
+                                    <!-- Existing payment method -->
+                                    <h:panelGroup id="tab-content-use-payment" layout="block" class="use-payment"
+                                                  rendered="#{not shoppingCartViewController.createNewPaymentSelected}">
+                                        <h:panelGroup class="use-payment-details"
+                                                      rendered="#{not shoppingCartViewController.createNewPaymentSelected}"
+                                                      layout="block">
+                                            <h:panelGroup layout="block" styleClass="use-payment-methods">
+                                                <ui:repeat
+                                                        value="#{currentUser.getPaymentServiceProviderWithCode(shoppingCartViewController.getPrimaryPSP()).playerPaymentList}"
+                                                        var="playerPayment">
+                                                    <div class="#{playerPayment.isSEPA() ? 'sepa' : (playerPayment.getCardType().name().toLowerCase())} js#{playerPayment.isSEPA() ? 'Sepa' : 'CC'}"
+                                                         onClick="selectPaymentMethod(this, '#{playerPayment.externalId}')">
+                                                        <i class="fa fa-check-circle" aria-hidden="true"/>
+
+                                                        <h:panelGroup styleClass="payment-method-details" layout="block"
+                                                                      rendered="#{not playerPayment.isSEPA()}">
+                                                            <div class="payment-column">
+                                                                <h:outputText
+                                                                        value="#{text['user.shoppingcart.payment.useexisting.cc.number']} #{playerPayment.last4}"/>
+                                                            </div>
+                                                            <div class="payment-column">
+                                                                <h:outputText
+                                                                        value="#{text['user.shoppingcart.payment.useexisting.cc.validto']} #{playerPayment.expireMonth}/#{playerPayment.expireYear}"/>
+                                                            </div>
+                                                            <div class="payment-column left-aligned">
+                                                                <h:outputText
+                                                                        value="#{playerPayment.cardOrAccountHolder}"/>
+                                                            </div>
+                                                        </h:panelGroup>
+
+                                                        <h:panelGroup styleClass="payment-method-details" layout="block"
+                                                                      rendered="#{playerPayment.isSEPA()}">
+                                                            <div class="payment-column">
+                                                                <h:outputText
+                                                                        value="#{text['user.shoppingcart.payment.useexisting.sepa.iban']} #{playerPayment.iban}"/>
+                                                            </div>
+                                                            <div class="payment-column">
+                                                                <h:outputText
+                                                                        value="#{text['user.shoppingcart.payment.useexisting.sepa.bic']} #{playerPayment.bic}"/>
+                                                            </div>
+                                                            <div class="payment-column left-aligned">
+                                                                <h:outputText
+                                                                        value="#{playerPayment.cardOrAccountHolder}"/>
+                                                            </div>
+                                                        </h:panelGroup>
+                                                    </div>
+
+                                                </ui:repeat>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+                                        <button id="existingPaymentBtn" onclick="submitExistingPayment()"
+                                                class="submitButton">
+                                                    <span class="fa fa-shopping-bag"
+                                                          style="margin-left: 10px; float: left"/>
+                                            <span class="text">#{text['user.shoppingcart.payment.useexisting.purchase']}</span>
+                                        </button>
+                                        <h:form id="paymentFormExisting">
+                                            <h:inputHidden id="selectedPaymentMethod"/>
+                                            <p:commandButton ajax="true" id="buyBtn"
+                                                             update="paymentFormExisting globalErrors"
+                                                             style="visibility: hidden; display: none"
+                                                             action="#{shoppingCartViewController.submitExistingPlayerPayment('paymentFormExisting', 'buyBtn')}"/>
+                                        </h:form>
+
+                                        <script type="text/javascript">
+                                            $(document).ready(function () {
+                                                var sepa = $('.jsSepa');
+                                                if (sepa.length) {
+                                                    sepa.first().click();
+                                                } else {
+                                                    $('.jsCC').first().click();
+                                                }
+                                            });
+                                        </script>
+                                    </h:panelGroup>
+                                </div>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </ui:fragment>
+                    <ui:fragment rendered="#{empty shoppingCartViewController.tickets}">
+                        <div class="no-items-in-cart">
+                            <i class="fa fa-shopping-bag cart-icon"/>
+                            <div class="text">
+                                #{text['user.shoppingcart.empty']}
+                            </div>
+                        </div>
+                    </ui:fragment>
+                </h:panelGroup>
+            </div>
+            <ui:include src="../errordialog.xhtml"/>
+            <p:messages id="globalErrors" globalOnly="true" showIcon="false"/>
+
+            <p:ajaxStatus styleClass="loader-container">
+                <f:facet name="start">
+                    <i class="fa fa-circle-o-notch fa-spin fa-5x ajax-loader loader" aria-hidden="true"/>
+                </f:facet>
+
+                <f:facet name="complete">
+                    <h:outputText value=""/>
+                </f:facet>
+            </p:ajaxStatus>
+        </section>
+
+        <p:ajaxStatus styleClass="loader-container">
+            <f:facet name="start">
+                <div class="modal"/>
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value=""/>
+            </f:facet>
+        </p:ajaxStatus>
+    </ui:define>
+
+
+</ui:composition>

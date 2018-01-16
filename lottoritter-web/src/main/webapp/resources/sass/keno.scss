@@ -1,0 +1,710 @@
+/* Copyright 2017 Ulrich Cech & Christopher Schmidt
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/*
+* @author Christopher Schmidt
+*/
+@import 'variables';
+@import 'mixins';
+
+.options {
+  padding: 4px;
+  @include noselect();
+
+  .wrapper {
+    padding: 2px;
+    float: left;
+  }
+
+  /* ----------- Options ----------- */
+
+  .optionHeader {
+    color: #8c1d82;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 15px 15px 15px 0;
+  }
+
+  /* ----------- Quickpicks ----------- */
+
+  .quickpicks {
+    color: #bbb;
+    font-weight: 400;
+    float: left;
+    margin-right: 20px;
+
+    .typebox {
+      float: left;
+      height: 38px;
+      margin: 0 5px 0 0;
+    }
+
+    .quicktippbox {
+      border-radius: 5px;
+      padding: 7px;
+      margin: 0 5px 0 0;
+      position: relative;
+      font-size: 20px;
+      text-align: center;
+      line-height: 22px;
+      float: left;
+      cursor: pointer;
+      width: 32px;
+    }
+  }
+
+  /* ----------- Ticketnumber ----------- */
+
+  .ticketNumber {
+    color: #bbb;
+    font-weight: 400;
+    float: left;
+    margin-right: 20px;
+    margin-top: 5px;
+
+    .digit {
+      color: #919191;
+      width: 25px;
+      height: 22px;
+      padding: 7px;
+      position: relative;
+      font-size: 20px;
+      text-align: center;
+      line-height: 22px;
+      border-left: 1px solid rgb(175, 175, 175);
+      border-right: 1px solid rgb(175, 175, 175);
+      border-top: 0;
+      border-top: 0;
+      border-bottom: 0;
+      float: left;
+      background-color: white;
+      cursor: pointer;
+    }
+
+    .number {
+      width: 40px;
+      float: left;
+    }
+
+    .arrow {
+      padding: 7px;
+      text-align: center;
+      width: 25px;
+    }
+
+    .arrowup-first {
+      @include border-radius-top-left(5px);
+      @include border-radius-top-right(0);
+      @include border-radius-bottom(0);
+    }
+
+    .arrowup {
+      @include border-radius(0);
+    }
+
+    .arrowup-last {
+      @include border-radius-top-left(0);
+      @include border-radius-top-right(5px);
+      @include border-radius-bottom(0);
+    }
+
+    .arrowdown-first {
+      @include border-radius-top(0);
+      @include border-radius-bottom-left(5px);
+      @include border-radius-bottom-right(0);
+    }
+
+    .arrowdown {
+      @include border-radius(0);
+    }
+
+    .arrowdown-last {
+      @include border-radius-top(0);
+      @include border-radius-bottom-left(0);
+      @include border-radius-bottom-right(5px);
+    }
+
+    .keyContainer {
+      height: 20px;
+      position: relative;
+      border-style: solid;
+      border-width: 0 1px 1px 1px;
+      float: right;
+      width: 71%;
+      margin: 5px;
+      right: 25px;
+
+      &.plus5 {
+        width: 75%;
+      }
+
+      .key {
+        float: right;
+        position: relative;
+        top: 5px;
+        background: white;
+        right: 55px;
+        padding: 5px;
+      }
+    }
+  }
+
+  /* ----------- Additional Lotteries ----------- */
+
+  .additionalLotteries {
+    color: #bbb;
+    font-weight: 400;
+    float: left;
+
+    .additionalLottery {
+      position: relative;
+      margin-bottom: 5px;
+
+      .checkbox-container {
+        width: 36px;
+        height: 36px;
+
+        label {
+          width: 36px;
+          height: 36px;
+
+          &:after {
+            width: 22px;
+            height: 10px;
+            top: 7px;
+            left: 5px
+          }
+        }
+      }
+    }
+
+    .plus5 {
+      background: url("\#{resource['svg:plus5.svg']}") no-repeat;
+      background-size: 150px 40px;
+      width: 165px;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      right: 70px;
+    }
+  }
+
+  /* ----------- Drawing ----------- */
+
+  .drawing {
+    color: #bbb;
+    font-weight: 400;
+    float: left;
+    margin-right: 20px;
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        color: #bbb;
+        display: block;
+        position: relative;
+        height: 40px;
+        width: 155px;
+        margin-bottom: 3px;
+
+        input[type=radio] {
+          position: absolute;
+          visibility: hidden;
+        }
+
+        label {
+          width: inherit;
+          display: block;
+          position: absolute;
+          font-weight: 400;
+          font-size: 25px;
+          padding: 7px 0 0 50px;
+          cursor: pointer;
+          z-index: 9;
+        }
+
+        .check {
+          display: block;
+          position: absolute;
+          border: 1px solid #bbb;
+          border-radius: 100%;
+          height: 37px;
+          width: 37px;
+          z-index: 5;
+
+          &::before {
+            content: '';
+            height: 25px;
+            width: 25px;
+            top: 5px;
+            left: 5px;
+            margin: auto;
+          }
+        }
+      }
+    }
+
+    input[type=radio]:checked ~ .check::before {
+      width: 27px;
+      background: #bfbfbf;
+      height: 27px;
+      position: absolute;
+      border-radius: 100%;
+    }
+
+    input[type=radio]:checked ~ label {
+      color: #8c1d82;
+    }
+  }
+
+  /* ----------- Next Drawing ----------- */
+
+  .next-drawing {
+    float: left;
+
+    .text {
+      font-size: 20px;
+      border: 1px solid;
+      @include border-radius(5px);
+      padding: 7px;
+    }
+  }
+
+  /* ----------- Bets ----------- */
+
+  .bets {
+
+    .betBox input[type=radio] {
+      position: absolute;
+      visibility: hidden;
+    }
+
+    .betBox {
+      float: left;
+      color: #bbb;
+      position: relative;
+      height: 39px;
+      width: 39px;
+      display: inline;
+      margin-right: 8px;
+
+      label {
+        text-align: center;
+        line-height: 39px;
+        width: 39px;
+        display: block;
+        position: absolute;
+        font-weight: 400;
+        font-size: 22px;
+        cursor: pointer;
+        z-index: 9;
+      }
+
+      .check {
+        display: block;
+        position: absolute;
+        border-radius: 100%;
+        border: 1px solid #bbb;
+        height: 37px;
+        width: 37px;
+        z-index: 5;
+
+        &::before {
+          display: block;
+          position: absolute;
+          content: '';
+          height: 37px;
+          width: 37px;
+          margin: auto;
+          border-radius: 100%;
+          top: 5px;
+          left: 5px;
+        }
+      }
+
+      input[type=radio]:checked ~ .check::before {
+        background: #bfbfbf;
+        width: 27px;
+        height: 27px;
+      }
+
+      input[type=radio]:checked ~ label {
+        color: white;
+      }
+    }
+
+    div .text {
+      line-height: 39px;
+      font-size: 22px;
+      float: left;
+    }
+  }
+
+  /* ----------- Duration ----------- */
+
+  .duration {
+    width: 330px;
+    color: #bbb;
+    font-weight: 400;
+    float: left;
+
+    .durationbox input[type=radio] {
+      position: absolute;
+      visibility: hidden;
+    }
+
+    .permaticket {
+      margin-top: 15px;
+      float: left;
+      position: relative;
+
+      .checkbox-container {
+        width: 37px;
+        height: 37px;
+
+        label {
+          width: 36px;
+          height: 36px;
+
+          &:after {
+            width: 22px;
+            height: 10px;
+            top: 7px;
+            left: 5px
+          }
+        }
+      }
+
+      .text {
+        position: absolute;
+        line-height: 39px;
+        left: 39px;
+        top: 0;
+        margin-left: 8px;
+        font-size: 22px;
+      }
+    }
+
+    .durationbox {
+      float: left;
+      color: #bbb;
+      position: relative;
+      height: 39px;
+      width: 39px;
+      display: inline;
+      margin-right: 8px;
+
+      label {
+        text-align: center;
+        line-height: 39px;
+        width: 39px;
+        display: block;
+        position: absolute;
+        font-weight: 400;
+        font-size: 22px;
+        cursor: pointer;
+        z-index: 9;
+      }
+
+      .check {
+        display: block;
+        position: absolute;
+        border-radius: 100%;
+        border: 1px solid #bbb;
+        height: 37px;
+        width: 37px;
+        z-index: 5;
+
+        &::before {
+          display: block;
+          position: absolute;
+          content: '';
+          height: 37px;
+          width: 37px;
+          margin: auto;
+          border-radius: 100%;
+          top: 5px;
+          left: 5px;
+        }
+      }
+
+      input[type=radio]:checked ~ .check::before {
+        background: #bfbfbf;
+        width: 27px;
+        height: 27px;
+      }
+
+      input[type=radio]:checked ~ label {
+        color: white;
+      }
+    }
+  }
+
+  /* ----------- Checkout ----------- */
+
+  .checkout {
+    width: 260px;
+    color: #bbb;
+    font-weight: 400;
+    float: left;
+
+    .checkoutbutton {
+      cursor: pointer;
+      padding: 15px;
+      background: #4CAF50;
+      border: 1px solid #4CAF50;
+      border-radius: 5px;
+      color: white;
+      height: 40px;
+
+      &:active {
+        cursor: pointer;
+        padding: 15px;
+        background: white;
+        border: 1px solid #4CAF50;
+        border-radius: 5px;
+        color: #4CAF50;
+        height: 40px;
+      }
+
+      .carticon {
+        float: left;
+        background: #2E7D32;
+        width: 40px;
+        height: 40px;
+        border: 1px solid #2E7D32;
+        border-radius: 100%;
+
+        i {
+          width: 37px;
+          text-align: center;
+          color: white;
+
+          &::before {
+            font-size: 30px;
+            line-height: 40px;
+            text-align: center;
+          }
+        }
+      }
+
+      .carttext {
+        float: left;
+        font-size: 25px;
+        line-height: 40px;
+        margin-left: 8px;
+      }
+    }
+
+    .pricetable {
+      margin: 0 5px 0 5px;
+      padding-bottom: 8px;
+
+      .item {
+        line-height: 30px;
+        height: 30px;
+        border: 0 solid #bbb;
+        border-bottom-width: 1px;
+
+        &:last-child {
+          border: none;
+          color: #2E7D32;
+        }
+
+        .name {
+          float: left;
+        }
+
+        .price {
+          float: right;
+
+          div {
+            float: left;
+          }
+
+          i {
+            float: left;
+            line-height: 30px;
+            margin-left: 5px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.ticket {
+  display: flex;
+  display: -webkit-flex; /* Safari 8 */
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap; /* Safari 8 */
+  justify-content: center;
+  -webkit-justify-content: center; /* Safari 8 */
+  @include noselect();
+
+  .tipparea {
+    position: relative;
+    float: left;
+    width: 203px;
+    padding: 2px;
+    margin: 2px 30px 2px 2px;
+
+    .number {
+      width: 207px;
+      font-size: 130px;
+      line-height: 290px;
+      position: absolute;
+      text-align: center;
+      font-weight: bold;
+      top: 35px;
+      color: rgba(0, 0, 0, 0.08);
+    }
+
+    .tippbox {
+      border-radius: 5px;
+      width: 27px;
+      height: 27px;
+      margin: 0 2px 2px 0;
+      position: relative;
+      font-size: 16px;
+      font-weight: 300;
+      text-align: center;
+      line-height: 25px;
+      color: #9c9c9c;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      float: left;
+      background-color: rgba(0, 0, 0, 0.025);
+      cursor: pointer;
+      padding: 0;
+
+      &.marked:after {
+        content: " ";
+        width: 27px;
+        height: 27px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: url("\#{resource['svg:cross.svg']}") no-repeat center;
+        background-size: 100%;
+      }
+    }
+
+    .spacer {
+      position: relative;
+      float: left;
+      height: 10px;
+      width: 290px;
+    }
+
+    .header {
+      line-height: 25px;
+      float: left;
+      height: 25px;
+      width: 160px;
+      color: #bbb;
+      font-weight: bold;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      background-color: rgba(0, 0, 0, 0.025);
+      border-radius: 5px;
+      margin-bottom: 5px;
+      margin-right: 5px;
+      padding: 2px;
+      text-align: center;
+    }
+
+    .possibleWinnings {
+      margin-top: 5px;
+      line-height: 25px;
+      float: left;
+      height: 50px;
+      width: 195px;
+      color: #bbb;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      background-color: rgba(0, 0, 0, 0.025);
+      border-radius: 5px;
+      margin-bottom: 5px;
+      margin-right: 5px;
+      padding: 2px;
+      text-align: center;
+    }
+
+    .clearpick {
+      line-height: 25px;
+      font-size: 25px;
+      padding: 2px;
+      margin-bottom: 5px;
+      width: 25px;
+      height: 25px;
+      float: left;
+    }
+
+    .highlight {
+      color: #8c1d82;
+    }
+  }
+
+}
+
+.ticket-header {
+  padding: 15px 30px 15px 30px;
+  height: 35px;
+  @include noselect();
+
+  .jackpot-text {
+    float: left;
+    color: #8c1d82;
+    font-size: 35px;
+    line-height: 35px;
+
+    span {
+      font-size: 40px;
+      font-weight: bold;
+    }
+  }
+
+  .next-drawing-text {
+    float: right;
+    font-size: 20px;
+    color: #656565;
+    line-height: 24px;
+    text-align: center;
+    margin-right: 30px;
+
+    div {
+      display: inline-block;
+      position: relative;
+      border: 1px solid #656565;
+      padding: 5px;
+      @include border-radius(5px);
+      width: 37px;
+      height: 25px;
+
+      .key {
+        position: absolute;
+        font-size: 12px;
+        padding: 0;
+        border: 0;
+        bottom: -6px;
+        left: 6px;
+        background: white;
+        border-radius: 0;
+        line-height: 10px;
+      }
+    }
+  }
+}

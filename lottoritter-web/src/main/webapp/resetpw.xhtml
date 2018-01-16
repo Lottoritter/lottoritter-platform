@@ -1,0 +1,190 @@
+<!--
+    * Copyright 2017 Ulrich Cech & Christopher Schmidt
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * You should have received a copy of the GNU General Public License
+    * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    */
+-->
+<!--
+* @author Christopher Schmidt
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/WEB-INF/template.xhtml">
+
+    <h:head>
+        <f:facet name="first">
+            <f:metadata>
+                <f:viewParam name="rp" value="#{resetPasswordViewController.initFlag}"/>
+                <f:viewParam name="rp_success" value="#{resetPasswordViewController.initSuccessFlag}"/>
+                <f:viewParam name="cp" value="#{resetPasswordViewController.changeFlag}"/>
+                <f:viewParam name="code" value="#{resetPasswordViewController.code}"/>
+                <f:viewAction action="#{resetPasswordViewController.checkCode()}"/>
+            </f:metadata>
+        </f:facet>
+    </h:head>
+
+    <ui:define name="content">
+
+        <section class="content no-header">
+
+            <div class="form single-column-form">
+
+                <h:form id="resetPasswordInitForm" rendered="#{resetPasswordViewController.initFlag}" style="width: 450px">
+                    <!-- request reset-code -->
+                    <h:panelGroup>
+                        <h1>#{text['user.change_password.title']}</h1>
+
+                        <f:validateBean disabled="true">
+                            <div class="row with-padding">
+                                <h:panelGroup
+                                        rendered="#{resetPasswordViewController.initFlag and not resetPasswordViewController.initSuccessFlag}">
+                                    #{text['user.change_password.intro_text']}
+                                </h:panelGroup>
+                            </div>
+                            <h:panelGroup id="emailGroup">
+                                <div class="row">
+                                    <h:panelGroup
+                                            rendered="#{resetPasswordViewController.initFlag and not resetPasswordViewController.initSuccessFlag}">
+                                        <i class="indicator fa fa-envelope" aria-hidden="true"/>
+                                        <p:inputText id="email" value="#{playerToChangePassword.email}"
+                                                     placeholder="#{text['user.change_password.email']}"/>
+                                        <p:keyFilter for="email" mask="email"/>
+                                    </h:panelGroup>
+                                </div>
+
+                                <div class="row with-padding">
+                                    <p:message for="email" display="text"/>
+                                </div>
+                            </h:panelGroup>
+
+                            <div class="row">
+                                <h:panelGroup id="cmd">
+                                    <p:commandButton id="requestChangePasswordCmd"
+                                                     actionListener="#{resetPasswordViewController.startProcess('resetPasswordInitForm', 'requestChangePasswordCmd')}"
+                                                     process="resetPasswordInitForm"
+                                                     update="resetPasswordInitForm"
+                                                     value="#{text['user.change_password.requestPassword']}"
+                                                     icon="fa fa-key icon"
+                                                     style="width: 350px"
+                                                     rendered="#{resetPasswordViewController.initFlag and not resetPasswordViewController.initSuccessFlag}"/>
+                                </h:panelGroup>
+                            </div>
+                            <div class="row">
+                                <p:message for="requestChangePasswordCmd" display="text"
+                                           showSummary="true" showDetail="false"
+                                           style="bottom: 35px;position: relative;padding: 10px;text-align: center;border-radius: 5px;border: 1px;"/>
+                            </div>
+                        </f:validateBean>
+                    </h:panelGroup>
+
+                    <div class="row with-padding" style="padding-top: 0">
+                        <h:link outcome="/login.xhtml">
+                            <i class="elementicon fa fa-chevron-left"/>
+                            <h:outputLabel value="#{text['backToLogin']}"/>
+                        </h:link>
+                    </div>
+                </h:form>
+
+
+                <h:form id="resetPasswordChangeForm" rendered="#{resetPasswordViewController.changeFlag}" style="width: 350px">
+                    <!-- change password -->
+                    <h:panelGroup>
+                        <f:validateBean disabled="true">
+                            <h1>#{text['user.change_password.newPassword.title']}</h1>
+
+                            <div class="row with-padding">
+                                <h:panelGroup
+                                        rendered="#{resetPasswordViewController.changeFlag and not resetPasswordViewController.changePasswordSuccessFlag}">
+                                    #{text['user.change_password.newPassword.into']}
+                                </h:panelGroup>
+                            </div>
+
+                            <!-- password -->
+                            <h:panelGroup id="passwordGroup"
+                                          rendered="#{resetPasswordViewController.changeFlag and not resetPasswordViewController.changePasswordSuccessFlag}">
+                                <div class="row">
+                                    <h:panelGroup>
+                                        <i class="indicator fa fa-key" aria-hidden="true"/>
+                                        <p:password id="password" value="#{playerToChangePassword.password}"
+                                                    type="password"
+                                                    autocomplete="off"
+                                                    redisplay="true"
+                                                    placeholder="#{text['user.change_password.newPassword']}">
+                                        </p:password>
+                                    </h:panelGroup>
+                                </div>
+
+                                <div class="row with-padding">
+                                    <p:message for="password" display="text"/>
+                                </div>
+                            </h:panelGroup>
+
+                            <!-- PasswordAgain -->
+                            <h:panelGroup id="passwordAgainGroup"
+                                          rendered="#{resetPasswordViewController.changeFlag and not resetPasswordViewController.changePasswordSuccessFlag}">
+                                <div class="row">
+                                    <h:panelGroup>
+                                        <i class="indicator fa fa-key" aria-hidden="true"/>
+                                        <p:password id="passwordAgain"
+                                                    value="#{playerToChangePassword.passwordAgain}"
+                                                    type="password"
+                                                    autocomplete="off"
+                                                    redisplay="true"
+                                                    placeholder="#{text['user.change_password.newPasswordAgain']}">
+                                        </p:password>
+                                    </h:panelGroup>
+                                </div>
+
+                                <div class="row with-padding">
+                                    <p:message for="passwordAgain" display="text"/>
+                                </div>
+                            </h:panelGroup>
+                            <div class="row">
+                                <h:panelGroup id="changePasswordCmdGroup">
+                                    <p:commandButton id="changePasswordCmd"
+                                                     actionListener="#{resetPasswordViewController.changePassword('resetPasswordChangeForm', 'changePasswordCmd')}"
+                                                     process="resetPasswordChangeForm"
+                                                     update="resetPasswordChangeForm"
+                                                     icon="fa fa-check icon"
+                                                     value="#{text['user.change_password.setNewPassword']}"
+                                                     style="width: 350px"
+                                                     rendered="#{resetPasswordViewController.changeFlag and not resetPasswordViewController.changePasswordSuccessFlag}"/>
+                                </h:panelGroup>
+                            </div>
+
+                            <div class="row">
+                                <p:message id="msgChangePasswordCmd" for="changePasswordCmd" display="text"
+                                           showSummary="true" showDetail="false"
+                                           style="bottom: 25px;position: relative;padding: 10px;text-align: center;border-radius: 5px;border: 1px;"/>
+                            </div>
+                        </f:validateBean>
+                    </h:panelGroup>
+
+                    <div class="row with-padding" style="padding-top: 0">
+                        <h:link outcome="/login.xhtml">
+                            <i class="elementicon fa fa-chevron-left"/>
+                            <h:outputLabel value="#{text['backToLogin']}"/>
+                        </h:link>
+                    </div>
+                </h:form>
+
+
+            </div>
+        </section>
+
+    </ui:define>
+</ui:composition>

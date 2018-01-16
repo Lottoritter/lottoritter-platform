@@ -1,0 +1,569 @@
+/* Compact */
+.options {
+  padding: 4px;
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                          supported by Chrome and Opera */
+  /* ----------- Options ----------- */
+  /* ----------- Quickpicks ----------- */
+  /* ----------- Ticketnumber ----------- */
+  /* ----------- Additional Lotteries ----------- */
+  /* ----------- Drawing ----------- */
+  /* ----------- Next Drawing ----------- */
+  /* ----------- Duration ----------- */
+  /* ----------- Checkout ----------- */ }
+  .options .wrapper {
+    padding: 2px;
+    float: left; }
+  .options .optionHeader {
+    color: #9e7a20;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 15px 15px 15px 0; }
+  .options .quickpicks {
+    color: #bbb;
+    font-weight: 400;
+    float: left;
+    margin-right: 20px; }
+    .options .quickpicks .quicktippbox {
+      border-radius: 5px;
+      padding: 7px;
+      margin: 0 5px 0 0;
+      position: relative;
+      font-size: 20px;
+      text-align: center;
+      line-height: 22px;
+      float: left;
+      cursor: pointer;
+      width: 36px; }
+    .options .quickpicks .deleteAll {
+      border-radius: 5px;
+      padding: 7px;
+      margin: 0 0 0 15px;
+      position: relative;
+      font-size: 20px;
+      text-align: center;
+      line-height: 22px;
+      float: left;
+      cursor: pointer;
+      width: auto; }
+  .options .ticketNumber {
+    color: #bbb;
+    font-weight: 400;
+    float: left;
+    margin-right: 20px;
+    margin-top: 5px; }
+    .options .ticketNumber .digit {
+      color: #919191;
+      width: 25px;
+      height: 22px;
+      padding: 7px;
+      position: relative;
+      font-size: 20px;
+      text-align: center;
+      line-height: 22px;
+      border-left: 1px solid #afafaf;
+      border-right: 1px solid #afafaf;
+      border-top: 0;
+      border-top: 0;
+      border-bottom: 0;
+      float: left;
+      background-color: white;
+      cursor: pointer; }
+    .options .ticketNumber .number {
+      width: 40px;
+      float: left; }
+    .options .ticketNumber .arrow {
+      padding: 7px;
+      text-align: center;
+      width: 25px; }
+    .options .ticketNumber .arrowup-first {
+      -moz-border-radius-topleft: 5px;
+      -webkit-border-top-left-radius: 5px;
+      border-top-left-radius: 5px;
+      -moz-border-radius-topright: 0;
+      -webkit-border-top-right-radius: 0;
+      border-top-right-radius: 0;
+      -moz-border-radius-bottomleft: 0;
+      -webkit-border-bottom-left-radius: 0;
+      border-bottom-left-radius: 0;
+      -moz-border-radius-bottomright: 0;
+      -webkit-border-bottom-right-radius: 0;
+      border-bottom-right-radius: 0; }
+    .options .ticketNumber .arrowup {
+      -moz-border-radius: 0;
+      -webkit-border-radius: 0;
+      border-radius: 0; }
+    .options .ticketNumber .arrowup-last {
+      -moz-border-radius-topleft: 0;
+      -webkit-border-top-left-radius: 0;
+      border-top-left-radius: 0;
+      -moz-border-radius-topright: 5px;
+      -webkit-border-top-right-radius: 5px;
+      border-top-right-radius: 5px;
+      -moz-border-radius-bottomleft: 0;
+      -webkit-border-bottom-left-radius: 0;
+      border-bottom-left-radius: 0;
+      -moz-border-radius-bottomright: 0;
+      -webkit-border-bottom-right-radius: 0;
+      border-bottom-right-radius: 0; }
+    .options .ticketNumber .arrowdown-first {
+      -moz-border-radius-topleft: 0;
+      -webkit-border-top-left-radius: 0;
+      border-top-left-radius: 0;
+      -moz-border-radius-topright: 0;
+      -webkit-border-top-right-radius: 0;
+      border-top-right-radius: 0;
+      -moz-border-radius-bottomleft: 5px;
+      -webkit-border-bottom-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+      -moz-border-radius-bottomright: 0;
+      -webkit-border-bottom-right-radius: 0;
+      border-bottom-right-radius: 0; }
+    .options .ticketNumber .arrowdown {
+      -moz-border-radius: 0;
+      -webkit-border-radius: 0;
+      border-radius: 0; }
+    .options .ticketNumber .arrowdown-last {
+      -moz-border-radius-topleft: 0;
+      -webkit-border-top-left-radius: 0;
+      border-top-left-radius: 0;
+      -moz-border-radius-topright: 0;
+      -webkit-border-top-right-radius: 0;
+      border-top-right-radius: 0;
+      -moz-border-radius-bottomleft: 0;
+      -webkit-border-bottom-left-radius: 0;
+      border-bottom-left-radius: 0;
+      -moz-border-radius-bottomright: 5px;
+      -webkit-border-bottom-right-radius: 5px;
+      border-bottom-right-radius: 5px; }
+    .options .ticketNumber .keyContainer {
+      height: 20px;
+      position: relative;
+      border-style: solid;
+      border-width: 0 1px 1px 1px;
+      float: right;
+      width: 71%;
+      margin: 5px;
+      right: 15px; }
+      .options .ticketNumber .keyContainer.super6 {
+        width: 71%; }
+      .options .ticketNumber .keyContainer.spiel77 {
+        width: 85%; }
+      .options .ticketNumber .keyContainer.superzahl {
+        width: 25%;
+        border-left: 0; }
+      .options .ticketNumber .keyContainer .key {
+        float: right;
+        position: relative;
+        top: 5px;
+        background: white;
+        right: 20px;
+        padding: 5px; }
+  .options .additionalLotteries {
+    color: #bbb;
+    font-weight: 400;
+    float: left; }
+    .options .additionalLotteries .additionalLottery {
+      position: relative;
+      margin-bottom: 5px; }
+      .options .additionalLotteries .additionalLottery .checkbox-container {
+        width: 36px;
+        height: 36px; }
+        .options .additionalLotteries .additionalLottery .checkbox-container label {
+          width: 36px;
+          height: 36px; }
+          .options .additionalLotteries .additionalLottery .checkbox-container label:after {
+            width: 22px;
+            height: 10px;
+            top: 7px;
+            left: 5px; }
+      .options .additionalLotteries .additionalLottery .not-selectable {
+        visibility: hidden;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        background: rgba(255, 255, 255, 0.8); }
+    .options .additionalLotteries .super6 {
+      background: url("#{resource['svg:super6.svg']}") no-repeat;
+      background-size: 150px 35px;
+      width: 165px;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      right: 70px; }
+    .options .additionalLotteries .spiel77 {
+      background: url("#{resource['svg:spiel77.svg']}") no-repeat;
+      background-size: 150px 35px;
+      width: 165px;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      right: 70px; }
+    .options .additionalLotteries .gluecksspirale {
+      background: url("#{resource['svg:gluecksspirale.svg']}") no-repeat;
+      background-size: 150px 37px;
+      width: 165px;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      right: 75px; }
+  .options .drawing {
+    color: #bbb;
+    font-weight: 400;
+    float: left;
+    margin-right: 20px; }
+    .options .drawing ul {
+      list-style: none;
+      margin: 0;
+      padding: 0; }
+      .options .drawing ul li {
+        color: #bbb;
+        display: block;
+        position: relative;
+        height: 40px;
+        width: 155px;
+        margin-bottom: 3px; }
+        .options .drawing ul li input[type=radio] {
+          position: absolute;
+          visibility: hidden; }
+        .options .drawing ul li label {
+          width: inherit;
+          display: block;
+          position: absolute;
+          font-weight: 400;
+          font-size: 25px;
+          padding: 7px 0 0 50px;
+          cursor: pointer;
+          z-index: 9; }
+        .options .drawing ul li .check {
+          display: block;
+          position: absolute;
+          border: 1px solid #bbb;
+          border-radius: 100%;
+          height: 37px;
+          width: 37px;
+          z-index: 5; }
+          .options .drawing ul li .check::before {
+            content: '';
+            height: 25px;
+            width: 25px;
+            top: 5px;
+            left: 5px;
+            margin: auto; }
+    .options .drawing input[type=radio]:checked ~ .check::before {
+      width: 27px;
+      background: #bfbfbf;
+      height: 27px;
+      position: absolute;
+      border-radius: 100%; }
+    .options .drawing input[type=radio]:checked ~ label {
+      color: #9e7a20; }
+  .options .next-drawing {
+    float: left; }
+    .options .next-drawing .text {
+      font-size: 20px;
+      border: 1px solid;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      padding: 7px; }
+  .options .duration {
+    width: 282px;
+    color: #bbb;
+    font-weight: 400;
+    float: left; }
+    .options .duration .durationbox input[type=radio] {
+      position: absolute;
+      visibility: hidden; }
+    .options .duration .permaticket {
+      margin-top: 15px;
+      float: left;
+      position: relative; }
+      .options .duration .permaticket .checkbox-container {
+        width: 37px;
+        height: 37px; }
+        .options .duration .permaticket .checkbox-container label {
+          width: 36px;
+          height: 36px; }
+          .options .duration .permaticket .checkbox-container label:after {
+            width: 22px;
+            height: 10px;
+            top: 7px;
+            left: 5px; }
+      .options .duration .permaticket .text {
+        position: absolute;
+        line-height: 39px;
+        left: 39px;
+        top: 0;
+        margin-left: 8px;
+        font-size: 22px; }
+    .options .duration .durationbox {
+      float: left;
+      color: #bbb;
+      position: relative;
+      height: 39px;
+      width: 39px;
+      display: inline;
+      margin-right: 8px; }
+      .options .duration .durationbox label {
+        text-align: center;
+        line-height: 39px;
+        width: 39px;
+        display: block;
+        position: absolute;
+        font-weight: 400;
+        font-size: 22px;
+        cursor: pointer;
+        z-index: 9; }
+      .options .duration .durationbox .check {
+        display: block;
+        position: absolute;
+        border-radius: 100%;
+        border: 1px solid #bbb;
+        height: 37px;
+        width: 37px;
+        z-index: 5; }
+        .options .duration .durationbox .check::before {
+          display: block;
+          position: absolute;
+          content: '';
+          height: 37px;
+          width: 37px;
+          margin: auto;
+          border-radius: 100%;
+          top: 5px;
+          left: 5px; }
+      .options .duration .durationbox input[type=radio]:checked ~ .check::before {
+        background: #bfbfbf;
+        width: 27px;
+        height: 27px; }
+      .options .duration .durationbox input[type=radio]:checked ~ label {
+        color: white; }
+  .options .checkout {
+    width: 260px;
+    color: #bbb;
+    font-weight: 400;
+    float: left; }
+    .options .checkout .checkoutbutton {
+      cursor: pointer;
+      padding: 15px;
+      background: #4CAF50;
+      border: 1px solid #4CAF50;
+      border-radius: 5px;
+      color: white;
+      height: 40px; }
+      .options .checkout .checkoutbutton:active {
+        cursor: pointer;
+        padding: 15px;
+        background: white;
+        border: 1px solid #4CAF50;
+        border-radius: 5px;
+        color: #4CAF50;
+        height: 40px; }
+      .options .checkout .checkoutbutton .carticon {
+        float: left;
+        background: #2E7D32;
+        width: 40px;
+        height: 40px;
+        border: 1px solid #2E7D32;
+        border-radius: 100%; }
+        .options .checkout .checkoutbutton .carticon i {
+          width: 37px;
+          text-align: center;
+          color: white; }
+          .options .checkout .checkoutbutton .carticon i::before {
+            font-size: 30px;
+            line-height: 40px;
+            text-align: center; }
+      .options .checkout .checkoutbutton .carttext {
+        float: left;
+        font-size: 25px;
+        line-height: 40px;
+        margin-left: 8px; }
+    .options .checkout .pricetable {
+      margin: 0 5px 0 5px;
+      padding-bottom: 8px; }
+      .options .checkout .pricetable .item {
+        line-height: 30px;
+        height: 30px;
+        border: 0 solid #bbb;
+        border-bottom-width: 1px; }
+        .options .checkout .pricetable .item:last-child {
+          border: none;
+          color: #2E7D32; }
+        .options .checkout .pricetable .item .name {
+          float: left; }
+        .options .checkout .pricetable .item .price {
+          float: right; }
+          .options .checkout .pricetable .item .price div {
+            float: left; }
+          .options .checkout .pricetable .item .price i {
+            float: left;
+            line-height: 30px;
+            margin-left: 5px; }
+
+.ticket {
+  display: flex;
+  display: -webkit-flex;
+  /* Safari 8 */
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  /* Safari 8 */
+  justify-content: center;
+  -webkit-justify-content: center;
+  /* Safari 8 */
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                          supported by Chrome and Opera */ }
+  .ticket .tipparea {
+    position: relative;
+    float: left;
+    width: 290px;
+    padding: 2px;
+    margin: 2px; }
+    .ticket .tipparea .number {
+      width: 290px;
+      font-size: 130px;
+      line-height: 145px;
+      position: absolute;
+      text-align: center;
+      font-weight: bold;
+      top: 35px;
+      color: rgba(0, 0, 0, 0.08); }
+    .ticket .tipparea .tippbox {
+      border-radius: 5px;
+      width: 27px;
+      height: 27px;
+      margin: 0 2px 2px 0;
+      position: relative;
+      font-size: 16px;
+      font-weight: 300;
+      text-align: center;
+      line-height: 25px;
+      color: #9c9c9c;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      float: left;
+      background-color: rgba(0, 0, 0, 0.025);
+      cursor: pointer;
+      padding: 0; }
+      .ticket .tipparea .tippbox.marked:after {
+        content: " ";
+        width: 27px;
+        height: 27px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: url("#{resource['svg:cross.svg']}") no-repeat center;
+        background-size: 100%; }
+    .ticket .tipparea .spacer {
+      position: relative;
+      float: left;
+      height: 10px;
+      width: 290px; }
+    .ticket .tipparea .header {
+      line-height: 25px;
+      float: left;
+      height: 25px;
+      width: 210px;
+      color: #bbb;
+      font-weight: bold;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      background-color: rgba(0, 0, 0, 0.025);
+      border-radius: 5px;
+      margin-bottom: 5px;
+      margin-left: 5px;
+      margin-right: 5px;
+      padding: 2px;
+      text-align: center; }
+    .ticket .tipparea .quickpick {
+      line-height: 25px;
+      font-size: 25px;
+      padding: 2px;
+      margin-bottom: 5px;
+      width: 25px;
+      height: 25px;
+      float: left; }
+    .ticket .tipparea .clearpick {
+      line-height: 25px;
+      font-size: 25px;
+      padding: 2px;
+      margin-bottom: 5px;
+      width: 25px;
+      height: 25px;
+      float: left; }
+    .ticket .tipparea .highlight {
+      color: #9e7a20; }
+
+.ticket-header {
+  padding: 15px 30px 15px 30px;
+  height: 35px;
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                          supported by Chrome and Opera */ }
+  .ticket-header .jackpot-text {
+    float: left;
+    color: #9e7a20;
+    font-size: 35px;
+    line-height: 35px; }
+    .ticket-header .jackpot-text span {
+      font-size: 40px;
+      font-weight: bold; }
+  .ticket-header .next-drawing-text {
+    float: right;
+    font-size: 20px;
+    color: #656565;
+    line-height: 24px;
+    text-align: center; }
+    .ticket-header .next-drawing-text div {
+      display: inline-block;
+      position: relative;
+      border: 1px solid #656565;
+      padding: 5px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      width: 37px;
+      height: 25px; }
+      .ticket-header .next-drawing-text div .key {
+        position: absolute;
+        font-size: 12px;
+        padding: 0;
+        border: 0;
+        bottom: -6px;
+        left: 6px;
+        background: white;
+        border-radius: 0;
+        line-height: 10px; }

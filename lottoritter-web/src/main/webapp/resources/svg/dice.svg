@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 225 225">
+    <defs>
+        <style>.cls-1{fill:#fff;}.cls-2{fill:#bbb;}</style>
+    </defs>
+    <title>Dice</title>
+    <g id="Ebene_2" data-name="Ebene 2">
+        <g id="Ebene_1-2" data-name="Ebene 1">
+            <rect class="cls-1" x="12.5" y="12.5" width="200" height="200"/>
+            <path class="cls-2"
+                  d="M200,25V200H25V25H200M213,0H12A12,12,0,0,0,0,12V213a12,12,0,0,0,12,12H213a12,12,0,0,0,12-12V12A12,12,0,0,0,213,0Z"/>
+            <circle class="cls-1" cx="66" cy="66" r="4.8"/>
+            <path class="cls-2" d="M66,46.2A19.8,19.8,0,1,0,85.8,66,19.8,19.8,0,0,0,66,46.2Z"/>
+            <circle class="cls-1" cx="159" cy="66" r="4.8"/>
+            <path class="cls-2" d="M159,46.2A19.8,19.8,0,1,0,178.8,66,19.8,19.8,0,0,0,159,46.2Z"/>
+            <circle class="cls-1" cx="112" cy="114" r="4.8"/>
+            <path class="cls-2" d="M112,94.2A19.8,19.8,0,1,0,131.8,114,19.8,19.8,0,0,0,112,94.2Z"/>
+            <circle class="cls-1" cx="66" cy="160" r="4.8"/>
+            <path class="cls-2" d="M66,140.2A19.8,19.8,0,1,0,85.8,160,19.8,19.8,0,0,0,66,140.2Z"/>
+            <circle class="cls-1" cx="159" cy="160" r="4.8"/>
+            <path class="cls-2" d="M159,140.2A19.8,19.8,0,1,0,178.8,160,19.8,19.8,0,0,0,159,140.2Z"/>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,195 @@
+/* Copyright 2017 Ulrich Cech & Christopher Schmidt
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/*
+* @author Christopher Schmidt
+*/
+@import 'variables';
+@import 'mixins';
+
+.navigation {
+  font-weight: bold;
+  width: 1282px;
+
+  input[type=button]:focus {
+    outline: none;
+  }
+
+  .german6aus49Btn {
+    position: relative;
+    float: left;
+    display: block;
+    line-height: 50px;
+    text-align: center;
+    cursor: pointer;
+    width: 320px;
+    height: 50px;
+    border: 1px solid #FFC107;
+    @include border-radius-left(5px);
+    color: #C90713;
+    background: #FFC107;
+    margin-right: 0;
+    font-size: 30px;
+
+    &:hover {
+      opacity: .8;
+    }
+
+    &:active {
+      opacity: .5;
+    }
+
+    .text {
+      position: absolute;
+      right: 40px;
+    }
+
+    .icon {
+      width: 40px;
+      height: 40px;
+      top: 5px;
+      left: 10px;
+      position: absolute;
+      background: url("\#{resource['svg:6aus49_icon_red.svg']}") no-repeat center;
+      background-size: 40px;
+    }
+  }
+
+  .eurojackpotBtn {
+    position: relative;
+    display: block;
+    float: left;
+    line-height: 50px;
+    text-align: center;
+    cursor: pointer;
+    width: 318px;
+    height: 50px;
+    border: 1px solid #ce9f28;
+    color: #efdc59;
+    background: #ce9f28;
+    margin-right: 0;
+    font-size: 30px;
+    text-shadow: 1px 2px #a2780d;
+
+    &:hover {
+      opacity: .8;
+    }
+
+    &:active {
+      opacity: .5;
+    }
+
+    .text {
+      position: absolute;
+      right: 40px;
+    }
+
+    .icon {
+      width: 40px;
+      height: 40px;
+      top: 5px;
+      left: 5px;
+      position: absolute;
+      font-size: 40px;
+      line-height: 40px;
+    }
+  }
+
+  .gluecksspiraleBtn {
+    position: relative;
+    display: block;
+    float: left;
+    line-height: 50px;
+    text-align: center;
+    cursor: pointer;
+    width: 318px;
+    height: 50px;
+    border: 1px solid #c90713;
+    color: white;
+    background: #c90713;
+    margin-right: 0;
+    font-size: 30px;
+    font-style: italic;
+
+    &:hover {
+      opacity: .8;
+    }
+
+    &:active {
+      opacity: .5;
+    }
+
+    .text {
+      position: absolute;
+      right: 40px;
+    }
+
+    .icon {
+      width: 35px;
+      height: 35px;
+      top: 8px;
+      left: 10px;
+      position: absolute;
+      background: url("\#{resource['svg:gluecksspirale_icon_colored.svg']}") no-repeat center;
+      background-size: 35px;
+    }
+  }
+
+  .kenoBtn {
+    position: relative;
+    display: block;
+    float: left;
+    line-height: 50px;
+    text-align: center;
+    cursor: pointer;
+    width: 318px;
+    height: 50px;
+    border: 1px solid #8c1d82;
+    @include border-radius-right(5px);
+    color: white;
+    background: #8c1d82;
+    margin-right: 0;
+    font-size: 30px;
+    font-style: italic;
+
+    &:hover {
+      opacity: .8;
+    }
+
+    &:active {
+      opacity: .5;
+    }
+
+    .text {
+      position: absolute;
+      width: 100px;
+      height: 35px;
+      top: 7px;
+      left: 38%;
+      background: url("\#{resource['svg:logo_keno.svg']}") no-repeat center;
+      background-size: 100px;
+    }
+
+    .icon {
+      width: 35px;
+      height: 35px;
+      top: 8px;
+      left: 10px;
+      position: absolute;
+      background: url("\#{resource['svg:keno_icon.svg']}") no-repeat center;
+      background-size: 35px;
+    }
+  }
+}

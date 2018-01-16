@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+    * Copyright 2017 Ulrich Cech & Christopher Schmidt
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * You should have received a copy of the GNU General Public License
+    * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    */
+-->
+<!--
+* @author Christopher Schmidt
+-->
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+              xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+              xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+    <composite:interface>
+        <composite:attribute name="resultHistoryWrapper" type="de.lottoritter.business.lotteries.TicketHistoryWrapper"
+                             required="true"/>
+    </composite:interface>
+
+    <composite:implementation>
+        <div class="ticket-results">
+
+            <div class="results">
+                <div class="info">
+                    <div class="text">
+                        <div class="header">
+                            #{text['user.profile.tabs.game_history.details.results']}
+                        </div>
+                    </div>
+                    <div class="text">
+                        <div class="left">
+                            #{text['user.profile.tabs.game_history.details.numbers']}:
+                        </div>
+                        <div class="right">
+                            <ui:repeat value="#{cc.attrs.resultHistoryWrapper.getDrawingForTicket('euroJackpot').numbers}" var="number"
+                                       varStatus="status">
+                                <h:outputText value="#{number}"/>
+                                <ui:fragment rendered="#{not status.last}">
+                                    <h:outputText value=", "/>
+                                </ui:fragment>
+                            </ui:repeat>
+                        </div>
+                    </div>
+                    <div class="text">
+                        <div class="left">
+                            #{text['user.profile.tabs.game_history.details.eurojackpot.additionalNumbers']}:
+                        </div>
+                        <div class="right">
+                            <ui:repeat value="#{cc.attrs.resultHistoryWrapper.getDrawingForTicket('euroJackpot').additionalNumbers}" var="number"
+                                       varStatus="status">
+                                <h:outputText value="#{number}"/>
+                                <ui:fragment rendered="#{not status.last}">
+                                    <h:outputText value=", "/>
+                                </ui:fragment>
+                            </ui:repeat>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field-box">
+                    <ui:repeat value="#{cc.attrs.resultHistoryWrapper.getCalculatedFieldsForLottery('euroJackpot')}" var="calculatedField">
+                        <div class="field">
+                            <div class="fieldnumber">
+                                #{calculatedField.field.fieldNumber}
+                            </div>
+                            <div class="numbers">
+                                <ui:repeat value="#{calculatedField.numbers}" var="calculatedNumber">
+                                    <div class="number #{calculatedNumber.hit ? 'stroked' : ''}">#{calculatedNumber.number}</div>
+                                </ui:repeat>
+
+                                <i class="fa fa-plus" style="line-height: 47px;width: 20px;"/>
+                                <ui:repeat value="#{calculatedField.field.selectedAdditionalNumbers}" var="number">
+                                    <ui:fragment
+                                            rendered="#{cc.attrs.resultHistoryWrapper.strokeAdditionalNumber(number)}">
+                                        <div class="number stroked">#{number}</div>
+                                    </ui:fragment>
+                                    <ui:fragment
+                                            rendered="#{not cc.attrs.resultHistoryWrapper.strokeAdditionalNumber(number)}">
+                                        <div class="number">#{number}</div>
+                                    </ui:fragment>
+                                </ui:repeat>
+                            </div>
+                        </div>
+                    </ui:repeat>
+                </div>
+
+                <div class="ticketnumbers">
+                    <div class="row-wrapper">
+                        <div class="label">
+                            #{text['user.profile.tabs.game_history.details.ticketnumber']}
+                        </div>
+                        <div class="nums">
+                            <ui:repeat value="#{cc.attrs.resultHistoryWrapper.mainTicket.number}" var="number">
+                                <div class="num">
+                                    #{number}
+                                </div>
+                            </ui:repeat>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </composite:implementation>
+</ui:component>

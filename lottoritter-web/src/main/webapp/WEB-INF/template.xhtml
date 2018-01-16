@@ -1,0 +1,92 @@
+<!--
+    * Copyright 2017 Ulrich Cech & Christopher Schmidt
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * You should have received a copy of the GNU General Public License
+    * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    */
+-->
+<!--
+* @author Christopher Schmidt
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<f:view locale="#{userSession.locale}">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes"/>
+            <f:metadata>
+                <!--registration-->
+                <f:event type="preRenderView"
+                         listener="#{registrationViewController.prefillRegistrationDataFromOAuth}"/>
+
+                <!--resetpw-->
+                <f:viewParam name="rp" value="#{resetPasswordViewController.initFlag}"/>
+                <f:viewParam name="rp_success" value="#{resetPasswordViewController.initSuccessFlag}"/>
+                <f:viewParam name="cp" value="#{resetPasswordViewController.changeFlag}"/>
+                <f:viewParam name="code" value="#{resetPasswordViewController.code}"/>
+                <f:viewAction action="#{resetPasswordViewController.checkCode()}"/>
+            </f:metadata>
+        </f:facet>
+        <title>#{text['title']}</title>
+        <h:outputScript name="js/helper.js" library=""/>
+
+        <link rel="apple-touch-icon" sizes="180x180" href="#{request.contextPath}/resources/images/favicons/apple-touch-icon.png"/>
+        <link rel="icon" type="image/png" href="#{request.contextPath}/resources/images/favicons/favicon-32x32.png" sizes="32x32"/>
+        <link rel="icon" type="image/png" href="#{request.contextPath}/resources/images/favicons/favicon-16x16.png" sizes="16x16"/>
+        <link rel="manifest" href="#{request.contextPath}/resources/images/favicons/manifest.json"/>
+        <link rel="mask-icon" href="#{request.contextPath}/resources/images/favicons/safari-pinned-tab.svg" color="#5bbad5"/>
+        <meta name="theme-color" content="#ffffff"/>
+
+        <ui:insert name="head"/>
+
+        <h:outputScript name="js/cookiehint.js" library=""/>
+        <h:outputScript name="js/countdown.js" library=""/>
+    </h:head>
+
+    <h:body>
+
+        <div id="jsCookiehint" class="cookiehint" style="display: none">
+            <p>#{text['cookie.privacy']}
+                <a rel="nofollow" href="/privacy">#{text['cookie.privacy.info']}</a>
+            </p>
+           <a href="#" class="accept" onclick="cookiehint.accept()">#{text['cookie.privacy.ok']}</a>
+        </div>
+
+        <div class="main-container">
+            <header>
+                <ui:include src="header.xhtml"/>
+            </header>
+            <section class="navigation">
+                <ui:include src="menu.xhtml"/>
+            </section>
+            <ui:insert name="content"/>
+            <footer>
+                <ui:include src="footer.xhtml"/>
+            </footer>
+        </div>
+
+        <h:outputStylesheet name="css/font-awesome.min.css" library=""/>
+        <h:outputStylesheet name="css/layout.css" library=""/>
+    </h:body>
+
+</f:view>
+
+</html>

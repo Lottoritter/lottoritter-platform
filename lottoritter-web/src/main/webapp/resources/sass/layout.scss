@@ -1,0 +1,2456 @@
+/* Copyright 2017 Ulrich Cech & Christopher Schmidt
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/*
+* @author Christopher Schmidt
+*/
+@import 'variables';
+@import 'mixins';
+@import "navigation";
+@import "balance";
+
+body {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: $textColor;
+  margin: 0;
+
+  .cookiehint {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: stretch;
+    align-content: stretch;
+
+    background: grey;
+    color: white;
+    padding: 15px;
+    font-weight: bold;
+
+    p {
+      margin: 0;
+      padding: 10px;
+    }
+
+    a {
+      color: #efdc59;
+
+      &.accept {
+        padding: 10px;
+        border-radius: 5px;
+        background: #efdc59;
+        color: #545454;
+      }
+    }
+  }
+
+  background: -webkit-linear-gradient(#f0f1ed, #d5d6d2, #f0f1ed); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(#f0f1ed, #d5d6d2, #f0f1ed); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(#f0f1ed, #d5d6d2, #f0f1ed); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(#f0f1ed, #d5d6d2, #f0f1ed); /* Standard syntax (must be last) */
+
+  .loader-container {
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+
+    .modal {
+      top: 0;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.5);
+      left: 0;
+    }
+
+    .loader {
+      color: #191919;
+      position: absolute;
+      left: 47%;
+      top: 47%;
+    }
+  }
+
+  .table {
+    text-align: center;
+    color: #737373;
+
+    .ui-paginator-bottom {
+      margin-top: 10px;
+      background: #eaeaea;
+      border-radius: 5px;
+    }
+
+    .ui-paginator-pages {
+      border: 1px solid #737373;
+      border-radius: 5px;
+      background: #f9f9f9;
+    }
+
+    .ui-datatable table {
+      width: 100%;
+      table-layout: auto;
+
+      .ui-row-toggler {
+        text-indent: unset;
+        font-size: 0;
+        width: 30px;
+        height: 30px;
+        @include nooutline();
+        background: url("\#{resource['svg:magnitude.svg']}") no-repeat center;
+        background-size: 30px;
+        margin: 10px 10px 10px 45%;
+
+        &:hover {
+          background: url("\#{resource['svg:magnitude_light.svg']}") no-repeat center;
+          background-size: 30px;
+        }
+      }
+
+      tr.ui-datatable-even {
+        background: #f9f9f9;
+      }
+      thead {
+        display: none;
+      }
+
+      td {
+        line-height: 50px;
+        height: 50px;
+        border: 0 !important;
+        padding: 0;
+      }
+    }
+
+    .head {
+      border-radius: 5px;
+      height: 50px;
+      line-height: 50px;
+      margin-bottom: 10px;
+      background: rgba(194, 194, 194, 0.35);
+      font-weight: bold;
+
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: stretch;
+      align-content: stretch;
+
+      .column {
+        padding: 0;
+        text-align: center;
+      }
+    }
+  }
+
+  .ui-messages-info.ui-corner-all {
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  .dialog {
+    background: white !important;
+    position: absolute !important;
+    width: auto !important;
+    height: auto !important;
+    left: 34% !important;
+    top: 24% !important;
+    z-index: 1002 !important;
+
+    .ui-dialog-title {
+      margin: 20px 0 0 0;
+      width: 100%;
+      text-align: center;
+      font-weight: bold;
+      font-size: 25px;
+    }
+
+    .ui-dialog-content.ui-widget-content {
+      text-align: center;
+      font-size: 20px;
+    }
+
+    .ui-dialog-buttonpane.ui-dialog-footer.ui-widget-content.ui-helper-clearfix {
+      padding: 0 0 0 8px;
+    }
+  }
+
+  a {
+    color: $linkColor;
+    text-decoration: none;
+    label {
+      cursor: pointer;
+    }
+
+    &:hover {
+      color: $linkHoverColor;
+      text-decoration: none;
+    }
+  }
+
+  .logo {
+    float: left;
+    background: url("\#{resource['svg:logo.svg']}") no-repeat center;
+    width: 230px;
+    height: 50px;
+    background-size: 100%;
+  }
+
+  .elementicon {
+    margin-right: 5px;
+  }
+
+  input[type=text], input[type=password] {
+    -webkit-box-shadow: 0 0 0 1000px white inset;
+    cursor: auto;
+    height: 35px;
+    font-size: 20px;
+    border: 0 solid #a9a9a9;
+    border-bottom-width: 1px;
+    background: #ffffff;
+    padding: 5px;
+
+    &.readonly {
+      border-bottom: 0;
+    }
+  }
+
+  .secondary-button {
+    color: #919191;
+    cursor: pointer;
+    background: #f9f9f9;
+    border: 1px solid #afafaf;
+    border-radius: 5px;
+    text-align: center;
+
+    &:hover {
+      background: #f1f1f1;
+      border: 1px solid #afafaf;
+    }
+
+    &:active {
+      color: #919191;
+      border: 1px solid #919191;
+      background: white;
+    }
+  }
+
+  .red-button {
+    color: #ffffff;
+    cursor: pointer;
+    background: #f90400;
+    border: 1px solid #f90400;
+    border-radius: 5px;
+    text-align: center;
+
+    &:hover {
+      background: rgba(249, 4, 0, 0.71);
+      border: 1px solid rgba(249, 4, 0, 0.71);
+    }
+
+    &:active {
+      color: #f90400;
+      border: 1px solid #f90400;
+      background: white;
+    }
+  }
+
+  button {
+    width: 260px;
+    height: 40px;
+    background: #4caf50;
+    border: 1px solid #4caf50;
+    border-radius: 5px;
+    color: white;
+    font-size: 20px;
+    @include nooutline();
+
+    &:hover {
+      background: #59c550;
+      border: 1px solid #59c550;
+    }
+
+    &:active {
+      background: white;
+      border: 1px solid #4CAF50;
+      color: #4CAF50;
+    }
+
+    span.clover {
+      margin-top: -14px !important;
+      width: 60px !important;
+      height: 40px !important;
+    }
+
+    span.icon {
+      margin-top: -10px !important;
+    }
+
+    &.disabled {
+      cursor: default;
+      background: #eaeaea;
+      border: 1px #eaeaea;
+      color: darkgrey;
+    }
+  }
+
+  //overrides primeface classes...
+  .ui-button {
+    margin-right: 0;
+  }
+
+  select {
+    border: 1px solid #a9a9a9;
+    font-size: 20px;
+    background: white;
+    color: #757575;
+    @include nooutline();
+  }
+
+  .checkbox-container {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    border: 1px solid;
+    position: relative;
+
+    label {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      position: absolute;
+      left: 0;
+      top: 0;
+
+      &:after {
+        content: '';
+        width: 18px;
+        height: 9px;
+        position: absolute;
+        top: 5px;
+        left: 4px;
+        border: 5px solid #757575;
+        border-top: none;
+        border-right: none;
+        background: transparent;
+        opacity: 0;
+        transform: rotate(-45deg);
+      }
+    }
+    input[type=checkbox] {
+      visibility: hidden;
+      &:checked + label:after {
+        opacity: 1;
+      }
+    }
+  }
+
+  h1 {
+    color: #C90713;
+    margin-bottom: 35px
+  }
+
+  .ui-widget-header {
+    border: none;
+    color: inherit;
+  }
+
+  .ui-state-active {
+    background-color: initial;
+  }
+
+  .ui-paginator .ui-paginator-pages a {
+    color: inherit;
+    @include border-radius(0);
+  }
+
+  .ui-paginator .ui-paginator-pages a.ui-state-hover {
+    background: none;
+  }
+
+  .ui-widget-content {
+    border: none;
+  }
+
+  .ui-paginator .ui-paginator-pages a.ui-state-active {
+    background: #dcdcdc;
+  }
+}
+
+.main-container {
+
+  width: 1250px;
+  margin: auto;
+
+  header {
+    width: 1280px;
+    padding: 15px 0 25px 0;
+    float: left;
+    margin-bottom: 5px;
+    font-size: 20px;
+
+    h1 {
+      float: left;
+      font-size: 35px;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .shopCartTicketIndicator {
+      position: absolute;
+      border: 1px solid rgb(201, 7, 19);
+      border-radius: 100%;
+      width: 25px;
+      height: 25px;
+      top: -12px;
+      right: -12px;
+      background: rgb(201, 7, 19);
+      color: white;
+      line-height: 25px;
+      text-align: center;
+    }
+
+    .topbar-items {
+      margin-top: 20px;
+      height: 20px;
+      float: right;
+      display: flex;
+      align-items: center;
+
+      .topbar-item {
+        float: left;
+      }
+
+      .separator {
+        float: left;
+        margin: 0 15px 0 15px;
+      }
+
+    }
+  }
+
+  .content-header {
+    @include border-radius-top(5px);
+    background: white;
+    float: left;
+    height: 15px;
+    width: 1282px;
+    margin-top: 10px;
+  }
+
+  .content {
+    @include border-radius-bottom(5px);
+    border: 1px solid white;
+    padding: 15px;
+    float: left;
+    width: 100%;
+    background-color: white;
+    position: relative;
+
+    &.no-header {
+      @include border-radius-top(5px);
+      margin-top: 10px;
+    }
+
+    .error {
+      display: none;
+      @include noselect();
+      color: white;
+      width: 460px;
+      position: absolute;
+      top: 30%;
+      left: 410px;
+      border-radius: 5px;
+      background: #c90713;
+      border: 1px solid #c90713;
+
+      header {
+        display: flex;
+        justify-content: center;
+        padding: 15px;
+        width: 430px;
+        float: left;
+        margin-bottom: 5px;
+        font-size: 20px;
+        line-height: 20px;
+        text-align: center;
+
+        i {
+          float: left;
+        }
+
+        .what {
+          float: left;
+          margin-left: 10px;
+        }
+      }
+
+      section {
+        width: 430px;
+        font-size: 16px;
+        line-height: 20px;
+        text-align: center;
+        float: left;
+        padding: 0 15px 10px 15px;
+
+        .why {
+
+        }
+
+        .how-to-solve {
+
+        }
+      }
+
+      footer {
+        float: left;
+        width: 430px;
+        border: 0;
+        @include border-radius(0);
+        line-height: 0;
+        background: none;
+        margin-top: 0;
+
+        button {
+          position: relative;
+          left: 85px;
+          top: 0;
+          width: 260px;
+          height: 40px;
+          background: white;
+          border: 1px solid white;
+          border-radius: 5px;
+          line-height: 40px;
+          color: #c90713;
+          font-size: 20px;
+          outline: none;
+          cursor: pointer;
+
+          &:hover {
+            background: #f5f5f5;
+          }
+
+          &:active {
+            background: #c90713;
+            color: white;
+          }
+        }
+      }
+    }
+  }
+
+  footer {
+    @include border-radius(5px);
+    border: 1px solid white;
+    margin-top: 10px;
+    padding: 15px;
+    float: left;
+    width: 100%;
+    background-color: white;
+    line-height: 24px;
+
+    .link-separator {
+      border-left: 1px solid #c9cbca;
+      height: 24px;
+      margin: 0 10px 0 10px;
+    }
+
+    .logo-shield {
+      float: left;
+      background: url("\#{resource['svg:logo_shield_light.svg']}") no-repeat center;
+      background-size: 18px;
+      width: 25px;
+      height: 25px;
+    }
+
+    .footer-text-left {
+      font-size: 18px;
+      margin-left: 7px;
+      float: left;
+    }
+
+    .footer-text-right {
+      color: $textSecondaryColor;
+      float: right;
+      margin-right: 10px;
+
+      span {
+        vertical-align: middle;
+        display: inline-block;
+      }
+    }
+  }
+}
+
+.form {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  align-content: stretch;
+
+  h1 {
+    text-align: center;
+  }
+
+  .row {
+    display: flex;
+    justify-content: center;
+
+    &.with-padding {
+      padding: 10px;
+    }
+  }
+
+  .indicator {
+    width: 40px;
+    font-size: 25px;
+    line-height: 35px;
+    text-align: center;
+    padding: 5px;
+    margin-right: 10px;
+  }
+
+  .google {
+    font-size: 2.5em;
+    color: #d34836;
+  }
+
+  .facebook {
+    font-size: 2.5em;
+    padding-left: 5px;
+    color: #3b5998;
+  }
+
+  .instagram {
+    font-size: 2.5em;
+    padding-left: 5px;
+    color: #bc2a8d
+  }
+
+  &.single-column-form {
+    input[type=text], input[type=password] {
+      width: 90%;
+
+      span {
+        margin-top: 0;
+        top: 25%;
+      }
+    }
+  }
+
+  &.dual-column-form {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: stretch;
+    align-content: stretch;
+
+    .left {
+      margin-left: 20px;
+    }
+
+    .right {
+      margin-right: 20px;
+    }
+
+    input[type=text], input[type=password] {
+      width: 90%;
+
+      span {
+        margin-top: 0;
+        top: 25%;
+      }
+    }
+  }
+}
+
+.clover {
+  background: url("\#{resource['svg:clover.svg']}") no-repeat center;
+  background-size: 45px;
+  width: 60px;
+  height: 40px;
+}
+
+.shoppingcart {
+
+  .type {
+    height: 50px;
+    width: 50px;
+    margin-left: 30%;
+
+    &.german6aus49 {
+      background: url("\#{resource['svg:german6aus49_balls.svg']}") no-repeat center;
+      background-size: 50px;
+    }
+
+    &.euroJackpot {
+      background: url("\#{resource['svg:euroJackpot.svg']}") no-repeat center;
+      background-size: 28px;
+    }
+
+    &.gluecksspirale {
+      background: url("\#{resource['svg:gluecksspirale_icon_colored.svg']}") no-repeat center;
+      background-size: 35px;
+    }
+
+    &.keno {
+      background: url("\#{resource['svg:logo_keno_lila.svg']}") no-repeat center;
+      background-size: 75px;
+      width: 75px;
+    }
+  }
+
+  .additionalGames {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-end;
+    align-content: center;
+
+    .super6 {
+      width: 35px;
+      height: 35px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      background: #c30061 url("\#{resource['svg:super6_icon_white.svg']}") no-repeat center;
+      background-size: 26px;
+      margin: 2px;
+    }
+    .spiel77 {
+      width: 35px;
+      height: 35px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      background: #0d93d2 url("\#{resource['svg:spiel77_icon_white.svg']}") no-repeat center;
+      background-size: 26px;
+      margin: 2px;
+    }
+    .gluecksspirale {
+      width: 35px;
+      height: 35px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+      border-radius: 5px;
+      background: #c6071c url("\#{resource['svg:gluecksspirale_icon_white.svg']}") no-repeat center;
+      background-size: 26px;
+      margin: 2px;
+    }
+  }
+
+  #shoppingcartGroup {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: stretch;
+
+    .no-items-in-cart {
+      position: relative;
+
+      .cart-icon {
+        font-size: 150px;
+        opacity: 0.2;
+      }
+
+      .text {
+        top: 70px;
+        position: absolute;
+        background: white;
+        padding: 5px;
+        width: 250px;
+        left: -55px;
+        text-align: center;
+      }
+    }
+
+    .totalprice {
+      color: #737373;
+      font-size: 20px;
+      line-height: 20px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-end;
+      align-items: center;
+      align-content: center;
+      margin-top: 20px;
+      margin-right: 50px;
+
+      span {
+        color: #737373;
+        font-weight: bold;
+      }
+
+      .text {
+        margin-right: 15px;
+      }
+    }
+
+    .tickets {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      align-content: stretch;
+      width: 100%;
+      margin-bottom: 20px;
+
+      .removeticket {
+        position: relative;
+        width: 35px;
+        height: 35px;
+        float: left;
+        color: #919191 !important;
+        cursor: pointer !important;
+        background: #f9f9f9 !important;
+        border: 1px solid #afafaf !important;
+        top: 0;
+        left: 20%;
+
+        span {
+          left: 15px;
+          top: 11px;
+          font-size: 25px;
+        }
+
+        &:hover {
+          background: #f1f1f1 !important;
+        }
+
+        &:active {
+          color: #919191 !important;
+          background: white !important;
+        }
+      }
+      .ticket {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: flex-start;
+        align-content: stretch;
+        margin: 0 0 20px 50px;
+        padding: 0 0 15px 0;
+        border: 0 solid;
+        border-bottom-width: 1px;
+        color: #737373;
+        height: 95px;
+
+        .container {
+          display: flex;
+        }
+
+        .ticketoptions {
+          display: flex;
+          flex-direction: column;
+          flex-wrap: nowrap;
+          justify-content: space-between;
+          align-items: stretch;
+          align-content: stretch;
+          margin-left: 10px;
+          height: 95px;
+
+          .name {
+            font-weight: bold;
+            font-size: 18px;
+          }
+
+          .options {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            align-items: stretch;
+            align-content: stretch;
+
+            font-size: 18px;
+            line-height: 45px;
+            text-align: center;
+
+            .fields {
+              margin: 0 5px 0 0;
+              width: 50px;
+              height: 42px;
+              position: relative;
+              @include border-radius(5px);
+              border: 1px solid rgba(115, 115, 115, 0.2);
+
+              span {
+                position: absolute;
+                font-size: 14px;
+                background: #fff;
+                top: -7px;
+                left: 4px;
+                padding: 0 2px 0 2px;
+                height: 12px;
+                line-height: 12px;
+              }
+            }
+
+            .drawingdate {
+              width: 95px;
+              height: 42px;
+              @include border-radius(5px);
+              border: 1px solid rgba(115, 115, 115, 0.2);
+              position: relative;
+
+              span {
+                position: absolute;
+                font-size: 14px;
+                background: #fff;
+                top: -7px;
+                left: 4px;
+                padding: 0 2px 0 2px;
+                height: 12px;
+                line-height: 12px;
+              }
+            }
+
+            .drawings {
+              margin: 0 0 0 5px;
+              width: 80px;
+              height: 42px;
+              @include border-radius(5px);
+              border: 1px solid rgba(115, 115, 115, 0.2);
+              position: relative;
+
+              span {
+                position: absolute;
+                font-size: 14px;
+                background: #fff;
+                top: -7px;
+                left: 4px;
+                padding: 0 2px 0 2px;
+                height: 12px;
+                line-height: 12px;
+              }
+            }
+          }
+
+        }
+
+        .image {
+          margin-right: 10px;
+          width: 95px;
+          height: 95px;
+
+          &.german6aus49 {
+            background: url("\#{resource['svg:german6aus49_balls.svg']}") no-repeat center;
+            background-size: 95px;
+          }
+        }
+
+      }
+
+    }
+
+    .payment {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: stretch;
+      align-content: stretch;
+      width: 100%;
+
+      .payment-header {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-items: stretch;
+        align-content: stretch;
+        width: 100%;
+
+        button {
+          padding: 5px;
+          width: 100%;
+          height: 100%;
+          background: #f9f9f9;
+          border: 0;
+          @include border-radius(0);
+          line-height: 40px;
+          color: darkgrey;
+          font-size: 20px;
+          @include nooutline();
+
+          &:hover {
+            background: rgba(194, 194, 194, 0.1);
+          }
+
+          &.selected {
+            background: white;
+            color: #737373;
+          }
+        }
+
+        .tab-header {
+          width: 50%;
+          font-size: 20px;
+          text-align: center;
+          border: 1px solid #737373;
+
+          &.left {
+            border-right: 0;
+            @include border-radius-top-left(5px);
+          }
+
+          &.selected {
+            border-bottom: 0 !important;
+          }
+
+          &.right {
+            @include border-radius-top-right(5px);
+          }
+        }
+      }
+
+      .tab-content {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: stretch;
+        align-content: stretch;
+        border: 1px solid #737373;
+        border-top: 0;
+        padding: 15px;
+        @include border-radius-bottom-left(5px);
+        @include border-radius-bottom-right(5px);
+
+        .new-payment {
+          padding: 5px;
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          justify-content: flex-start;
+          align-items: flex-start;
+          align-content: stretch;
+
+          .new-payment-selection {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+            justify-content: flex-start;
+            align-items: stretch;
+            align-content: stretch;
+            border: 1px solid;
+            @include border-radius(5px);
+            width: 15%;
+            cursor: pointer;
+
+            .visa {
+              position: relative;
+              border: 0 solid;
+              border-bottom-width: 1px;
+              background: url("\#{resource['svg:payment/visa.svg']}") no-repeat 10px;
+              background-size: 95px;
+              height: 50px;
+
+              &:hover {
+                background-color: rgba(194, 194, 194, 0.1);
+              }
+
+              &.selected {
+                background-color: rgba(194, 194, 194, 0.35);
+              }
+
+              i {
+                display: none;
+                position: absolute;
+                color: #737373;
+                top: 0;
+                right: 11px;
+                font-size: 30px;
+                line-height: 50px;
+              }
+            }
+
+            .mastercard {
+              position: relative;
+              border: 0 solid;
+              border-bottom-width: 1px;
+              background: url("\#{resource['svg:payment/mastercard.svg']}") no-repeat 10px;
+              background-size: 75px;
+              height: 50px;
+
+              &:hover {
+                background-color: rgba(194, 194, 194, 0.1);
+              }
+
+              &.selected {
+                background-color: rgba(194, 194, 194, 0.35);
+              }
+
+              i {
+                display: none;
+                position: absolute;
+                color: #737373;
+                top: 0;
+                right: 11px;
+                font-size: 30px;
+                line-height: 50px;
+              }
+            }
+
+            .sepa {
+              position: relative;
+              background: url("\#{resource['svg:payment/sepa.svg']}") no-repeat 10px;
+              background-size: 105px;
+              height: 50px;
+
+              &:hover {
+                background-color: rgba(194, 194, 194, 0.1);
+              }
+
+              &.selected {
+                background-color: rgba(194, 194, 194, 0.35);
+              }
+
+              i {
+                display: none;
+                position: absolute;
+                color: #737373;
+                top: 0;
+                right: 11px;
+                font-size: 30px;
+                line-height: 50px;
+              }
+            }
+
+          }
+
+          .new-payment-details {
+            display: flex;
+            border: 1px solid;
+            @include border-radius(5px);
+            width: 401px;
+            margin-left: 15px;
+            padding: 15px;
+
+            #paymentNewCreditCard {
+              display: flex;
+              flex-direction: column;
+              flex-wrap: nowrap;
+              justify-content: flex-start;
+              align-items: flex-end;
+              align-content: stretch;
+
+              .submitButton {
+                float: right;
+                cursor: pointer;
+                width: 190px;
+              }
+            }
+
+            #paymentNewSEPA {
+              display: flex;
+              flex-direction: column;
+              flex-wrap: nowrap;
+              justify-content: flex-start;
+              align-items: flex-end;
+              align-content: stretch;
+
+              #sepa-payment-form {
+                width: 400px;
+
+                .row {
+                  line-height: 46px;
+
+                  input {
+                    margin-left: 10px;
+                    width: 80%;
+                  }
+                }
+              }
+
+              .submitButton {
+                cursor: pointer;
+                width: 190px;
+              }
+            }
+          }
+
+        }
+
+        .use-payment {
+          padding: 5px;
+          display: flex;
+          flex-direction: column;
+          flex-wrap: nowrap;
+          justify-content: flex-start;
+          align-items: flex-end;
+          align-content: stretch;
+
+          .submitButton {
+            cursor: pointer;
+            width: 190px;
+            margin-top: 15px;
+          }
+
+          .use-payment-details {
+            display: flex;
+            border: 1px solid;
+            @include border-radius(5px);
+            width: 100%;
+
+            #paymentForm {
+              width: 100%;
+            }
+
+            .use-payment-methods {
+              width: 100%;
+              cursor: pointer;
+              display: flex;
+              flex-direction: column;
+              flex-wrap: nowrap;
+              justify-content: flex-start;
+              align-items: stretch;
+              align-content: stretch;
+
+              .payment-method-details {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                justify-content: flex-end;
+                align-items: stretch;
+                align-content: stretch;
+                width: 80%;
+                margin-left: 20%;
+
+                .payment-column {
+                  width: 350px;
+                  color: #737373;
+                  line-height: 50px;
+                  text-align: center;
+
+                  &.left-aligned {
+                    text-align: left;
+                  }
+                }
+              }
+
+              .visa {
+                position: relative;
+                border: 0 solid;
+                border-bottom-width: 1px;
+                background: url("\#{resource['svg:payment/visa.svg']}") no-repeat 60px;
+                background-size: 95px;
+                height: 50px;
+
+                &:last-child {
+                  border-bottom-width: 0;
+                }
+
+                &:hover {
+                  background-color: rgba(194, 194, 194, 0.1);
+                }
+
+                &.selected {
+                  background-color: rgba(194, 194, 194, 0.35);
+                }
+
+                i {
+                  display: none;
+                  position: absolute;
+                  color: #4caf50;
+                  top: 0;
+                  left: 11px;
+                  font-size: 30px;
+                  line-height: 50px;
+                }
+              }
+
+              .mastercard {
+                position: relative;
+                border: 0 solid;
+                border-bottom-width: 1px;
+                background: url("\#{resource['svg:payment/mastercard.svg']}") no-repeat 75px;
+                background-size: 75px;
+                height: 50px;
+
+                &:last-child {
+                  border-bottom-width: 0;
+                }
+
+                &:hover {
+                  background-color: rgba(194, 194, 194, 0.1);
+                }
+
+                &.selected {
+                  background-color: rgba(194, 194, 194, 0.35);
+                }
+
+                i {
+                  display: none;
+                  position: absolute;
+                  color: #4caf50;
+                  top: 0;
+                  left: 11px;
+                  font-size: 30px;
+                  line-height: 50px;
+                }
+              }
+
+              .sepa {
+                position: relative;
+                border: 0 solid;
+                border-bottom-width: 1px;
+                background: url("\#{resource['svg:payment/sepa.svg']}") no-repeat 60px;
+                background-size: 105px;
+                height: 50px;
+
+                &:last-child {
+                  border-bottom-width: 0;
+                }
+
+                &:hover {
+                  background-color: rgba(194, 194, 194, 0.1);
+                }
+
+                &.selected {
+                  background-color: rgba(194, 194, 194, 0.35);
+                }
+
+                i {
+                  display: none;
+                  position: absolute;
+                  color: #4caf50;
+                  top: 0;
+                  left: 11px;
+                  font-size: 30px;
+                  line-height: 50px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: stretch;
+
+  .tab-bar {
+    width: 1240px;
+
+    .message {
+      bottom: 20px;
+      position: relative;
+      padding: 10px;
+      text-align: center;
+      border-radius: 5px;
+      border: 1px;
+    }
+
+    .form.dual-column-form .left {
+      margin: 0;
+    }
+
+    .form.dual-column-form .right {
+      margin: 0;
+    }
+
+    .ui-tabs-panels {
+      position: relative !important;
+      border: 1px solid #737373;
+      border-top: 0;
+      @include border-radius-bottom-right(5px);
+      @include border-radius-bottom-left(5px);
+
+      .ui-tabs-panel {
+        padding: 37px 35px 35px 35px;
+      }
+    }
+
+    ul {
+      line-height: 38px !important;
+      padding: 0 !important;
+      height: 45px !important;
+
+      li {
+        top: 0 !important;
+        border: 1px solid #737373 !important;
+        border-left-width: 0 !important;
+        height: 45px !important;
+        margin: 0 !important;
+        width: 176px;
+        background: #f9f9f9;
+        @include nooutline();
+
+        &.ui-tabs-selected a {
+          color: #737373 !important;
+        }
+
+        &.ui-state-active {
+          border-bottom-width: 0 !important;
+          background: white;
+        }
+
+        &:first-child {
+          @include border-radius-top-left(5px);
+          border-left-width: 1px !important;
+        }
+
+        &:last-child {
+          @include border-radius-top-right(5px);
+        }
+
+        a {
+          @include nooutline();
+          height: 45px;
+          width: 166px;
+          text-align: center;
+          margin: 0 5px 0 5px;
+          padding: 0 !important;
+          font-size: 20px !important;
+          line-height: 45px;
+
+          &:hover {
+            color: #949795;
+          }
+        }
+      }
+    }
+  }
+
+  .limits {
+    text-align: center;
+    color: #737373;
+
+    .cells {
+      height: 35px;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 5px;
+      background: #f9f9f9;
+
+      &.cell-left {
+        width: 150px;
+      }
+
+      &.cell-center {
+        width: 120px;
+      }
+
+      &.cell-right {
+        width: 325px;
+      }
+
+      &.highlighted {
+        font-weight: bold;
+      }
+
+      &.no-background {
+        background: none;
+      }
+
+      &.text-only {
+        line-height: 35px;
+      }
+    }
+
+    .slider {
+      margin-top: 5px;
+      height: 7px;
+      background: #949795;
+      border-radius: 5px;
+
+      span {
+        border-radius: 100%;
+        background: #c90713;
+        @include nooutline();
+      }
+    }
+  }
+
+  .suspend {
+    text-align: center;
+    color: #737373;
+  }
+
+  .transactions {
+    text-align: center;
+    color: #737373;
+
+    .visa {
+      background: url("\#{resource['svg:payment/visa.svg']}") no-repeat center;
+      background-size: 95px;
+      height: 50px;
+    }
+
+    .mastercard {
+      background: url("\#{resource['svg:payment/mastercard.svg']}") no-repeat center;
+      background-size: 75px;
+      height: 50px;
+    }
+
+    .sepa {
+      background: url("\#{resource['svg:payment/sepa.svg']}") no-repeat center;
+      background-size: 105px;
+      height: 50px;
+    }
+
+    .status {
+      position: relative;
+      left: 39%;
+      width: 20px;
+      height: 20px;
+      border-radius: 100%;
+      cursor: help;
+
+      &.closed {
+        background: #1cb123;
+      }
+
+      &.open {
+        background: white;
+        border: 1px solid #737373;
+      }
+
+      &.pending {
+        background: #ffd800;
+      }
+
+      &.failed {
+        background: #f90027;
+      }
+
+      &.undefined {
+        background: #c2c2c2;
+      }
+
+      &.refunded {
+        background: #157d16;
+      }
+
+      &.chargeback {
+        background: #157d16;
+      }
+
+      &:hover {
+        opacity: .5;
+      }
+    }
+  }
+
+  .active-games {
+    text-align: center;
+    color: #737373;
+
+    .type {
+      height: 50px;
+      width: 50px;
+      margin-left: 30%;
+
+      &.german6aus49 {
+        background: url("\#{resource['svg:german6aus49_balls.svg']}") no-repeat center;
+        background-size: 50px;
+      }
+
+      &.euroJackpot {
+        background: url("\#{resource['svg:euroJackpot.svg']}") no-repeat center;
+        background-size: 28px;
+      }
+
+      &.gluecksspirale {
+        background: url("\#{resource['svg:gluecksspirale_icon_colored.svg']}") no-repeat center;
+        background-size: 35px;
+      }
+
+      &.keno {
+        background: url("\#{resource['svg:logo_keno_lila.svg']}") no-repeat center;
+        background-size: 75px;
+        width: 75px;
+      }
+    }
+
+    .additionalGames {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: flex-end;
+      align-content: center;
+
+      .super6 {
+        width: 35px;
+        height: 35px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        background: #c30061 url("\#{resource['svg:super6_icon_white.svg']}") no-repeat center;
+        background-size: 26px;
+        margin: 2px;
+      }
+      .spiel77 {
+        width: 35px;
+        height: 35px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        background: #0d93d2 url("\#{resource['svg:spiel77_icon_white.svg']}") no-repeat center;
+        background-size: 26px;
+        margin: 2px;
+      }
+      .gluecksspirale {
+        width: 35px;
+        height: 35px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        background: #c6071c url("\#{resource['svg:gluecksspirale_icon_white.svg']}") no-repeat center;
+        background-size: 26px;
+        margin: 2px;
+      }
+      .plus5 {
+        display: block;
+        @include nooutline();
+        margin: 0 5px 3px 0;
+        width: 90px;
+        height: 30px;
+        @include border-radius(5px);
+        background: #cecece url("\#{resource['svg:plus5.svg']}") no-repeat center;
+        background-size: 75px;
+      }
+    }
+  }
+
+  .game-history {
+    text-align: center;
+    color: #737373;
+
+    .type {
+      height: 50px;
+      width: 50px;
+      margin-left: 30%;
+
+      &.german6aus49 {
+        background: url("\#{resource['svg:german6aus49_balls.svg']}") no-repeat center;
+        background-size: 50px;
+      }
+
+      &.euroJackpot {
+        background: url("\#{resource['svg:euroJackpot.svg']}") no-repeat center;
+        background-size: 28px;
+      }
+
+      &.gluecksspirale {
+        background: url("\#{resource['svg:gluecksspirale_icon_colored.svg']}") no-repeat center;
+        background-size: 35px;
+      }
+    }
+
+    .additionalGames {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: flex-end;
+      align-content: center;
+
+      .super6 {
+        width: 35px;
+        height: 35px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        background: #c30061 url("\#{resource['svg:super6_icon_white.svg']}") no-repeat center;
+        background-size: 26px;
+        margin: 2px;
+      }
+      .spiel77 {
+        width: 35px;
+        height: 35px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        background: #0d93d2 url("\#{resource['svg:spiel77_icon_white.svg']}") no-repeat center;
+        background-size: 26px;
+        margin: 2px;
+      }
+      .gluecksspirale {
+        width: 35px;
+        height: 35px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 5px;
+        background: #c6071c url("\#{resource['svg:gluecksspirale_icon_white.svg']}") no-repeat center;
+        background-size: 26px;
+        margin: 2px;
+      }
+    }
+  }
+}
+
+.ticket-details {
+  background: rgba(255, 193, 7, 0.22);
+
+  .details {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    align-content: stretch;
+    padding: 20px;
+    min-width: 1128px;
+
+    .field-box {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: stretch;
+      align-content: stretch;
+      border: 1px solid;
+      border-radius: 5px;
+      background: #f9f9f9;
+      line-height: 47px;
+
+      .field {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: stretch;
+        align-content: stretch;
+
+        .fieldnumber {
+          border: 0 solid;
+          border-right-width: 1px;
+          padding: 0 5px 0 5px;
+          width: 20px;
+        }
+
+        .numbers {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          justify-content: space-between;
+          align-items: stretch;
+          align-content: stretch;
+
+          .number {
+            border: 1px solid;
+            border-radius: 100%;
+            width: 35px;
+            height: 35px;
+            margin: 5px;
+            background: white;
+            line-height: 35px;
+            font-weight: bold;
+          }
+        }
+
+      }
+    }
+
+    .ticketnumbers {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: stretch;
+      align-content: stretch;
+      border: 1px solid;
+      border-radius: 5px;
+      background: #f9f9f9;
+      line-height: 47px;
+      padding: 5px;
+
+      .row-wrapper {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: stretch;
+        align-content: stretch;
+
+        .label {
+          display: flex;
+          justify-content: flex-end;
+          height: 47px;
+          line-height: 47px;
+          width: 140px;
+          margin-right: 10px;
+
+          &.super6 {
+            background: url("\#{resource['svg:super6.svg']}") no-repeat right;
+            background-size: 110px 25px;
+          }
+
+          &.spiel77 {
+            background: url("\#{resource['svg:spiel77.svg']}") no-repeat right;
+            background-size: 110px 25px;
+          }
+
+          &.gluecksspirale {
+            background: url("\#{resource['svg:gluecksspirale.svg']}") no-repeat right;
+            background-size: 110px 30px;
+          }
+
+          &.plus5 {
+            background: url("\#{resource['svg:plus5.svg']}") no-repeat right;
+            background-size: 110px 30px;
+          }
+        }
+
+        .nums {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          justify-content: flex-end;
+          align-items: stretch;
+          align-content: stretch;
+          width: 290px;
+
+          .num {
+            border: 1px solid;
+            background: white;
+            width: 35px;
+            height: 35px;
+            line-height: 35px;
+            margin: 5px 2px 5px 2px;
+          }
+        }
+      }
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: stretch;
+      align-content: stretch;
+      margin: 0 10px 0 10px;
+      border: 1px solid;
+      border-radius: 5px;
+      background: #f9f9f9;
+      line-height: 47px;
+      padding: 5px;
+      width: 325px;
+
+      .text {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: stretch;
+        align-content: stretch;
+        height: 35px;
+        line-height: 35px;
+
+        .left {
+          display: flex;
+          justify-content: flex-end;
+          width: 145px;
+          margin-right: 10px;
+        }
+
+        .right {
+        }
+
+        &.cancelSubscription {
+          height: 50px;
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          justify-content: center;
+          align-items: center;
+          align-content: stretch;
+        }
+      }
+    }
+  }
+}
+
+.ticket-results {
+  background: rgba(255, 193, 7, 0.22);
+
+  .results {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    align-content: stretch;
+    padding: 20px;
+    min-width: 1128px;
+
+    .field-box {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: stretch;
+      align-content: stretch;
+      border: 1px solid;
+      border-radius: 5px;
+      background: #f9f9f9;
+      line-height: 47px;
+
+      .field {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: stretch;
+        align-content: stretch;
+
+        .fieldnumber {
+          border: 0 solid;
+          border-right-width: 1px;
+          padding: 0 5px 0 5px;
+          width: 20px;
+        }
+
+        .numbers {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          justify-content: space-between;
+          align-items: stretch;
+          align-content: stretch;
+
+          .number {
+            position: relative;
+            border: 1px solid;
+            border-radius: 100%;
+            width: 35px;
+            height: 35px;
+            margin: 5px;
+            background: white;
+            line-height: 35px;
+            font-weight: bold;
+
+            &.stroked {
+              background: #90ee90;
+            }
+          }
+        }
+
+      }
+    }
+
+    .ticketnumbers {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: stretch;
+      align-content: stretch;
+      border: 1px solid;
+      border-radius: 5px;
+      background: #f9f9f9;
+      line-height: 47px;
+      padding: 5px;
+
+      .row-wrapper {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: stretch;
+        align-content: stretch;
+
+        .label {
+          display: flex;
+          justify-content: flex-end;
+          height: 47px;
+          line-height: 47px;
+          width: 140px;
+          margin-right: 10px;
+
+          &.super6 {
+            background: url("\#{resource['svg:super6.svg']}") no-repeat right;
+            background-size: 110px 25px;
+          }
+
+          &.spiel77 {
+            background: url("\#{resource['svg:spiel77.svg']}") no-repeat right;
+            background-size: 110px 25px;
+          }
+
+          &.gluecksspirale {
+            background: url("\#{resource['svg:gluecksspirale.svg']}") no-repeat right;
+            background-size: 110px 30px;
+          }
+        }
+
+        .nums {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: nowrap;
+          justify-content: flex-end;
+          align-items: stretch;
+          align-content: stretch;
+          width: 290px;
+
+          .num {
+            border: 1px solid;
+            background: white;
+            width: 35px;
+            height: 35px;
+            line-height: 35px;
+            margin: 5px 2px 5px 2px;
+
+            &.stroked {
+              background: #90ee90;
+            }
+          }
+        }
+      }
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      align-items: stretch;
+      align-content: stretch;
+      margin: 0 10px 0 10px;
+      border: 1px solid;
+      border-radius: 5px;
+      background: #f9f9f9;
+      line-height: 47px;
+
+      .text {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items: stretch;
+        align-content: stretch;
+        height: 35px;
+        line-height: 35px;
+
+        .header {
+          width: 100%;
+          border-bottom: 1px solid;
+        }
+
+        .left {
+          display: flex;
+          justify-content: flex-start;
+          margin-left: 10px;
+          margin-right: 10px;
+        }
+
+        .right {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+}
+
+.price-cart {
+  color: #737373;
+  text-align: right;
+  margin-right: 50px;
+  font-size: 20px;
+  line-height: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: flex-end;
+  align-content: stretch;
+}
+
+.additionalGames {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: flex-end;
+  align-content: center;
+  position: relative;
+  min-width: 90px;
+  margin: 0 5px 0 0;
+
+  .super6-cart {
+    display: block;
+    @include nooutline();
+    margin: 0 5px 3px 5px;
+    width: 30px;
+    height: 30px;
+    @include border-radius(5px);
+    background: #c30061 url("\#{resource['svg:super6_icon_white.svg']}") no-repeat center;
+    background-size: 26px;
+    opacity: 1;
+  }
+  .spiel77-cart {
+    display: block;
+    @include nooutline();
+    margin: 0 5px 3px 0;
+    width: 30px;
+    height: 30px;
+    @include border-radius(5px);
+    background: #0d93d2 url("\#{resource['svg:spiel77_icon_white.svg']}") no-repeat center;
+    background-size: 26px;
+    opacity: 1;
+  }
+  .gluecksspirale-cart {
+    display: block;
+    @include nooutline();
+    margin: 0 5px 3px 0;
+    width: 30px;
+    height: 30px;
+    @include border-radius(5px);
+    background: #c6071c url("\#{resource['svg:gluecksspirale_icon_white.svg']}") no-repeat center;
+    background-size: 26px;
+    opacity: 1;
+  }
+  .plus5-cart {
+    display: block;
+    @include nooutline();
+    margin: 0 5px 3px 0;
+    width: 90px;
+    height: 30px;
+    @include border-radius(5px);
+    background: #cecece url("\#{resource['svg:plus5.svg']}") no-repeat center;
+    background-size: 75px;
+    opacity: 1;
+  }
+
+  .not-selected {
+    opacity: .2;
+  }
+}
+
+.goodluck {
+
+  .container {
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: stretch;
+    position: relative;
+
+    background: #4caf50; /* Old browsers */
+    background: -moz-linear-gradient(-45deg, r #4caf50 0%, rgba(76, 175, 80, 0.65) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-45deg, #4caf50 0%, rgba(76, 175, 80, 0.65) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(135deg, #4caf50 0%, rgba(76, 175, 80, 0.65) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4caf50', endColorstr='#4caf50', GradientType=1); /* IE6-9 fallback on horizontal gradient */
+    @include border-radius(5px);
+    width: 100%;
+    height: 200px;
+    line-height: 150px;
+    font-size: 20px;
+    color: white;
+    text-align: center;
+
+    .link {
+      line-height: 0;
+
+      a {
+        color: white;
+
+        &:hover {
+          opacity: .5;
+        }
+      }
+    }
+
+    .clover-goodluck {
+      position: absolute;
+      width: 200px;
+      height: 150px;
+      background: url("\#{resource['svg:clover.svg']}") no-repeat center;
+      background-size: 150px;
+
+      &.left {
+        left: 50px;
+        top: 45px;
+      }
+
+      &.right {
+        right: 10px;
+        top: 45px;
+      }
+    }
+  }
+}
+
+.home {
+
+  .marketing {
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: stretch;
+    position: relative;
+
+    background: #31b6c2; /* Old browsers */
+    background: -moz-linear-gradient(-45deg, r #31b6c2 0%, rgba(49, 182, 194, 0.65) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-45deg, #31b6c2 0%, rgba(49, 182, 194, 0.65) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(135deg, #31b6c2 0%, rgba(49, 182, 194, 0.65) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#31b6c2', endColorstr='#31b6c2', GradientType=1); /* IE6-9 fallback on horizontal gradient */
+    @include border-radius(5px);
+    width: 100%;
+    height: 300px;
+    font-size: 20px;
+    color: white;
+    text-align: center;
+
+    .ulrich {
+      position: absolute;
+      top: 75px;
+      left: 30px;
+      width: 225px;
+      height: 220px;
+      background: url("\#{resource['images:marketing/ulrich.png']}") no-repeat center;
+      background-size: 100%;
+      border-radius: 50%;
+    }
+
+    .christopher {
+      position: absolute;
+      top: 75px;
+      left: 975px;
+      width: 225px;
+      height: 220px;
+      background: url("\#{resource['images:marketing/christopher.png']}") no-repeat center;
+      background-size: 100%;
+      border-radius: 50%;
+    }
+
+    .title {
+      font-size: 40px;
+      margin: 25px;
+      text-align: left;
+    }
+
+    .subtitle {
+      margin-top: 15px;
+      font-size: 35px;
+      width: 660px;
+    }
+  }
+
+  .german6aus49 {
+    margin-top: 5px;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: stretch;
+    position: relative;
+
+    background: #FFC107; /* Old browsers */
+    background: -moz-linear-gradient(-45deg, r #FFC107 0%, rgba(255, 193, 7, 0.65) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-45deg, #FFC107 0%, rgba(255, 193, 7, 0.65) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(135deg, #FFC107 0%, rgba(255, 193, 7, 0.65) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c90713', endColorstr='#c90713', GradientType=1); /* IE6-9 fallback on horizontal gradient */
+    @include border-radius(5px);
+    width: 100%;
+    height: 200px;
+    font-size: 20px;
+    color: #C90713;
+    text-align: center;
+
+    .german6aus49-logo {
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      width: 160px;
+      height: 140px;
+      background: url("\#{resource['svg:german6aus49_balls.svg']}") no-repeat center;
+      background-size: 160px;
+    }
+
+    .lottery-title {
+      font-size: 50px;
+      margin: 10px;
+      width: 800px;
+      text-align: left;
+    }
+
+    .jackpot {
+      font-size: 75px;
+      margin: 10px;
+      width: 800px;
+      text-align: left;
+    }
+
+    .play-button {
+      position: absolute;
+      right: 45px;
+      bottom: 30px;
+
+      button {
+        font-weight: bold;
+        height: 60px;
+        background: rgb(76, 175, 80);
+
+        &:hover {
+          background: rgba(76, 175, 80, 0.65);
+        }
+
+        &:active {
+          color: white;
+        }
+      }
+    }
+
+    .deadline .next-drawing-text div .key {
+      background: rgb(255, 212, 80);
+    }
+
+    .deadline .next-drawing-text {
+      text-shadow: 1px 2px grey;
+    }
+  }
+
+  .eurojackpot {
+    margin-top: 5px;
+    font-weight: 500;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: stretch;
+    position: relative;
+    text-shadow: 1px 2px #a2780d;
+
+    background: #ce9f28; /* Old browsers */
+    background: -moz-linear-gradient(-45deg, r #ce9f28 0%, rgba(206, 159, 40, 0.65) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(-45deg, #ce9f28 0%, rgba(206, 159, 40, 0.65) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(135deg, #ce9f28 0%, rgba(206, 159, 40, 0.65) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#c90713', endColorstr='#c90713', GradientType=1); /* IE6-9 fallback on horizontal gradient */
+    @include border-radius(5px);
+    width: 100%;
+    height: 200px;
+    font-size: 20px;
+    color: #efdc59;
+    text-align: center;
+
+    .eurojackpot-logo {
+      text-shadow: -12px -5px #A2780d;
+      position: absolute;
+      font-size: 210px;
+      top: 20px;
+      left: 30px;
+      width: 160px;
+      height: 160px;
+      line-height: 160px;
+    }
+
+    .lottery-title {
+      font-size: 50px;
+      margin: 10px;
+      width: 800px;
+      text-align: left;
+    }
+
+    .jackpot {
+      font-size: 75px;
+      margin: 10px;
+      width: 800px;
+      text-align: left;
+    }
+
+    .play-button {
+      position: absolute;
+      right: 45px;
+      bottom: 30px;
+
+      button {
+        font-weight: bold;
+        height: 60px;
+        background: rgb(76, 175, 80);
+
+        &:hover {
+          background: rgba(76, 175, 80, 0.65);
+        }
+
+        &:active {
+          color: white;
+        }
+      }
+    }
+
+    .deadline .next-drawing-text div .key {
+      background: rgb(221, 189, 107);
+    }
+  }
+
+  .deadline {
+    position: absolute;
+    right: 45px;
+    top: 60px;
+
+    .next-drawing-text {
+      float: right;
+      font-size: 20px;
+      color: white;
+      line-height: 24px;
+      text-align: center;
+
+      div {
+        display: inline-block;
+        position: relative;
+        border: 1px solid white;
+        padding: 5px;
+        @include border-radius(5px);
+        width: 37px;
+        height: 25px;
+
+        .key {
+          position: absolute;
+          font-size: 12px;
+          padding: 0;
+          border: 0;
+          bottom: -6px;
+          left: 6px;
+          border-radius: 0;
+          line-height: 10px;
+        }
+      }
+    }
+  }
+}

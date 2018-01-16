@@ -1,0 +1,125 @@
+<!--
+    * Copyright 2017 Ulrich Cech & Christopher Schmidt
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * You should have received a copy of the GNU General Public License
+    * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    */
+-->
+<!--
+* @author Christopher Schmidt
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+
+        <section class="content no-header">
+
+            <h:form id="registrationForm">
+                <div class="form single-column-form">
+
+                    <f:validateBean disabled="true">
+                        <input title="" type="text" name="username" id="username_fake" value=""
+                               style="display: none;"/>
+                        <input title="" type="password" name="password" id="password_fake" value=""
+                               style="display: none;"/>
+
+                        <div class="left" style="width: 35%">
+                            <h1>#{text['user.registration.playerdata']}</h1>
+                            <!-- eMail -->
+                            <h:panelGroup id="emailGroup">
+                                <div class="row">
+                                    <h:panelGroup>
+                                        <i class="indicator fa fa-envelope" aria-hidden="true"/>
+                                        <p:inputText id="email" value="#{playerToRegister.email}"
+                                                     placeholder="#{text['user.registration.email']}"
+                                                     autocomplete="off"/>
+                                        <p:keyFilter for="email" mask="email"/>
+                                    </h:panelGroup>
+                                </div>
+                                <div class="row with-padding" style="justify-content: left; margin-left: 45px">
+                                    <p:message for="email" display="text"/>
+                                </div>
+                            </h:panelGroup>
+                            <!-- Password -->
+                            <h:panelGroup id="passwordGroup"
+                                          rendered="#{not registrationViewController.oauthRegistration}">
+                                <div class="row">
+                                    <h:panelGroup>
+                                        <i class="indicator fa fa-key" aria-hidden="true"/>
+                                        <p:password id="password" value="#{playerToRegister.password}"
+                                                    type="password"
+                                                    autocomplete="off"
+                                                    redisplay="true"
+                                                    placeholder="#{text['user.registration.password']}">
+                                        </p:password>
+                                    </h:panelGroup>
+                                </div>
+                                <input title="" type="password" name="fake_password2" id="fake_password2" value=""
+                                       style="display: none;"/>
+                                <div class="row with-padding" style="justify-content: left; margin-left: 45px">
+                                    <p:message for="password" display="text"/>
+                                </div>
+                            </h:panelGroup>
+                            <!-- PasswordAgain -->
+                            <h:panelGroup id="passwordAgainGroup"
+                                          rendered="#{not registrationViewController.oauthRegistration}">
+                                <div class="row">
+                                    <h:panelGroup>
+                                        <i class="indicator fa fa-key" aria-hidden="true"/>
+                                        <p:password id="passwordAgain" value="#{playerToRegister.passwordAgain}"
+                                                    type="password"
+                                                    autocomplete="off"
+                                                    redisplay="true"
+                                                    placeholder="#{text['user.registration.passwordAgain']}">
+                                        </p:password>
+                                    </h:panelGroup>
+                                </div>
+                                <div class="row with-padding" style="justify-content: left; margin-left: 45px">
+                                    <p:message for="passwordAgain" display="text"/>
+                                </div>
+                            </h:panelGroup>
+
+                            <div class="row" style="justify-content: flex-end">
+                                <div style="margin-right: 20px">
+                                    <a href="#{googleOAuthController.createInitialOAuthRequest()}">
+                                        <i class="google fa fa-google-plus-square"/>
+                                    </a>
+                                    <a href="#{facebookOAuthController.createInitialOAuthRequest()}">
+                                        <i class="facebook fa fa-facebook-square"/>
+                                    </a>
+                                    <a href="#{instagramOAuthController.createInitialOAuthRequest()}">
+                                        <i class="instagram fa fa-instagram"/>
+                                    </a>
+                                </div>
+                                <div>
+                                    <p:commandButton id="registerCmd"
+                                                     actionListener="#{registrationViewController.register(playerToRegister, request.getSession().getAttribute('url'))}"
+                                                     process="@form"
+                                                     update="registrationForm"
+                                                     value="#{text['user.registration.register']}"
+                                                     icon="fa fa-user-plus icon"/>
+                                </div>
+                            </div>
+                        </div>
+                    </f:validateBean>
+                </div>
+            </h:form>
+        </section>
+    </ui:define>
+</ui:composition>

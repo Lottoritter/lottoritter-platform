@@ -1,0 +1,71 @@
+<pretty-config xmlns="http://ocpsoft.org/schema/rewrite-config-prettyfaces"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://ocpsoft.org/schema/rewrite-config-prettyfaces
+                      http://ocpsoft.org/xml/ns/prettyfaces/rewrite-config-prettyfaces.xsd">
+
+    <url-mapping id="root">
+        <pattern value="/" />
+        <view-id value="/index.xhtml" />
+    </url-mapping>
+
+    <url-mapping id="index">
+        <pattern value="/index" />
+        <view-id value="/index.xhtml" />
+    </url-mapping>
+
+    <url-mapping id="login">
+        <pattern value="/login" />
+        <view-id value="/login.xhtml" />
+    </url-mapping>
+
+    <url-mapping id="registration">
+        <pattern value="/registration" />
+        <view-id value="/registration.xhtml" />
+    </url-mapping>
+
+    <url-mapping id="profile">
+        <pattern value="/profile" />
+        <view-id value="/sec/profile.xhtml" />
+    </url-mapping>
+
+    <url-mapping id="shoppingcart">
+        <pattern value="/shoppingcart" />
+        <view-id value="/sec/shoppingcart.xhtml" />
+    </url-mapping>
+
+    <url-mapping id="german6aus49">
+        <pattern value="/german6aus49" />
+        <view-id value="/lotteries/german6aus49.xhtml" />
+    </url-mapping>
+
+    <url-mapping id="eurojackpot">
+        <pattern value="/eurojackpot" />
+        <view-id value="/lotteries/eurojackpot.xhtml" />
+    </url-mapping>
+
+    <url-mapping id="glueckssirale">
+        <pattern value="/gluecksspirale" />
+        <view-id value="/lotteries/gluecksspirale.xhtml" />
+    </url-mapping>
+
+    <url-mapping id="keno">
+        <pattern value="/keno" />
+        <view-id value="/lotteries/keno.xhtml" />
+    </url-mapping>
+
+    <url-mapping id="toc">
+        <pattern value="/toc" />
+        <view-id value="/legal/toc.xhtml" />
+    </url-mapping>
+
+    <url-mapping id="privacy">
+        <pattern value="/privacy" />
+        <view-id value="/legal/privacypolicy.xhtml" />
+    </url-mapping>
+
+    <url-mapping id="imprint">
+        <pattern value="/imprint" />
+        <view-id value="/legal/imprint.xhtml" />
+    </url-mapping>
+
+</pretty-config>

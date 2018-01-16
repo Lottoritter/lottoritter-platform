@@ -1,0 +1,173 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+    * Copyright 2017 Ulrich Cech & Christopher Schmidt
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * You should have received a copy of the GNU General Public License
+    * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    */
+-->
+<!--
+* @author Christopher Schmidt
+-->
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+              xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+              xmlns:composite="http://xmlns.jcp.org/jsf/composite"
+              xmlns:h="http://xmlns.jcp.org/jsf/html"
+              xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
+
+    <composite:interface>
+        <composite:attribute name="ticket" type="de.lottoritter.business.lotteries.german6aus49.German6aus49Ticket"
+                             required="true"/>
+        <composite:attribute name="shoppingcart" type="java.lang.Boolean" default="false"/>
+    </composite:interface>
+
+    <composite:implementation>
+        <div class="ticket-details">
+
+            <div class="details">
+                <div class="field-box">
+                    <ui:repeat value="#{cc.attrs.ticket.fields}" var="field">
+                        <ui:fragment rendered="#{field.validFilled}">
+                            <div class="field">
+                                <div class="fieldnumber">
+                                    #{field.fieldNumber}
+                                </div>
+                                <div class="numbers">
+                                    <ui:repeat value="#{field.selectedNumbers}" var="number">
+                                        <div class="number">#{number}</div>
+                                    </ui:repeat>
+                                </div>
+                            </div>
+                        </ui:fragment>
+                    </ui:repeat>
+                </div>
+
+                <div class="info">
+                    <div class="text">
+                        <div class="left">
+                            #{text['user.profile.tabs.active_games.details.drawings']}
+                        </div>
+                        <div class="right">
+                            #{german6aus49DetailsViewController.getDrawingDays(cc.attrs.ticket)}
+                        </div>
+                    </div>
+                    <div class="text">
+                        <div class="left">
+                            #{text['user.profile.tabs.active_games.details.firstDrawing']}
+                        </div>
+                        <div class="right">
+                            <h:outputText value="#{cc.attrs.ticket.startingDate}">
+                                <f:converter converterId="zonedDateTimeConverter"/>
+                                <f:attribute name="pattern" value="dd.MM.yyyy HH:mm"/>
+                            </h:outputText>
+                        </div>
+                    </div>
+                    <div class="text">
+                        <div class="left">
+                            #{text['user.profile.tabs.active_games.details.lastDrawing']}
+                        </div>
+                        <div class="right">
+                            <ui:fragment rendered="#{cc.attrs.ticket.permaTicket}">
+                                <h:outputText value="&#8734;"/>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{not cc.attrs.ticket.permaTicket}">
+                                <h:outputText value="#{cc.attrs.ticket.endingDate}">
+                                    <f:converter converterId="zonedDateTimeConverter"/>
+                                    <f:attribute name="pattern" value="dd.MM.yyyy HH:mm"/>
+                                </h:outputText>
+                            </ui:fragment>
+                        </div>
+                    </div>
+                    <div class="text">
+                        <div class="left">
+                            #{text['user.profile.tabs.active_games.details.nextDrawing']}
+                        </div>
+                        <div class="right">
+                            <h:outputText value="#{cc.attrs.ticket.lottery.getNextDrawing(null, null)}">
+                                <f:converter converterId="zonedDateTimeConverter"/>
+                                <f:attribute name="pattern" value="dd.MM.yyyy HH:mm"/>
+                            </h:outputText>
+                        </div>
+                    </div>
+                    <ui:fragment rendered="#{cc.attrs.ticket.permaTicket and not cc.attrs.shoppingcart}">
+                        <h:panelGroup class="text cancelSubscription">
+                            <p:commandButton
+                                    value="#{text['user.profile.tabs.active_games.details.cancelPermaTicket']}"
+                                    action="#{profileViewController.cancelPermaTicket(cc.attrs.ticket)}"
+                                    update="tabs:dataTableActiveTicketList"/>
+                        </h:panelGroup>
+                    </ui:fragment>
+                </div>
+
+                <div class="ticketnumbers">
+                    <div class="row-wrapper">
+                        <div class="label">
+                            #{text['user.profile.tabs.active_games.details.ticketNumber']}
+                        </div>
+                        <div class="nums">
+                            <ui:repeat value="#{cc.attrs.ticket.number}" var="number">
+                                <div class="num">
+                                    #{number}
+                                </div>
+                            </ui:repeat>
+                        </div>
+                    </div>
+
+                    <ui:repeat value="#{cc.attrs.ticket.embeddedTickets}" var="embeddedTicket">
+                        <ui:fragment
+                                rendered="#{embeddedTicket.lotteryIdentifier eq 'gluecksspirale' or embeddedTicket.lotteryIdentifier eq 'spiel77'}">
+                            <div class="row-wrapper">
+                                <div class="label #{embeddedTicket.lotteryIdentifier}">
+                                </div>
+                                <div class="nums">
+                                    <ui:repeat value="#{cc.attrs.ticket.number}" var="number">
+                                        <div class="num">
+                                            #{number}
+                                        </div>
+                                    </ui:repeat>
+                                </div>
+                            </div>
+                        </ui:fragment>
+                        <ui:fragment rendered="#{embeddedTicket.lotteryIdentifier eq 'super6'}">
+                            <div class="row-wrapper" style="justify-content: flex-end">
+                                <div class="label #{embeddedTicket.lotteryIdentifier}">
+                                </div>
+                                <div class="nums">
+                                    <ui:repeat
+                                            value="#{cc.attrs.ticket.getEmbeddedTicket(embeddedTicket.lotteryIdentifier).fields[0].selectedNumbers}"
+                                            var="number">
+                                        <div class="num">
+                                            #{number}
+                                        </div>
+                                    </ui:repeat>
+                                </div>
+                            </div>
+                        </ui:fragment>
+                    </ui:repeat>
+
+                    <div class="row-wrapper">
+                        <div class="label">
+                            #{text['lottery.german6aus49.options.ticketNumber.keys.superzahl']}
+                        </div>
+                        <div class="nums">
+                            <div class="num">
+                                #{cc.attrs.ticket.number[6]}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </composite:implementation>
+</ui:component>

@@ -1,0 +1,111 @@
+<!--
+    * Copyright 2017 Ulrich Cech & Christopher Schmidt
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * You should have received a copy of the GNU General Public License
+    * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    */
+-->
+<!--
+* @author Christopher Schmidt
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <script>
+        $.extend( $.ui.keyCode, {
+            NUMPAD_ENTER: 108
+        });
+    </script>
+
+    <ui:define name="content">
+        <section class="content no-header">
+
+            <div class="form single-column-form">
+                <h:form id="loginForm" style="width: 350px">
+                    <h1>#{text['user.login.title']}</h1>
+
+                    <div class="row">
+                        <h:panelGroup>
+                            <i class="indicator fa fa-envelope" aria-hidden="true"/>
+                            <p:inputText id="email" value="#{userToLogin.email}" required="true"
+                                         requiredMessage="#{text['user.login.email.required']}"
+                                         placeholder="#{text['user.login.email']}"/>
+                        </h:panelGroup>
+                    </div>
+                    <div class="row with-padding">
+                        <p:message for="email" display="text"/>
+                    </div>
+                    <div class="row">
+                        <h:panelGroup>
+                            <i class="indicator fa fa-key" aria-hidden="true"/>
+                            <p:password id="password" value="#{userToLogin.password}" type="password"
+                                        required="true"
+                                        requiredMessage="#{text['user.login.password.required']}"
+                                        placeholder="#{text['user.login.password']}"/>
+                        </h:panelGroup>
+                    </div>
+                    <div class="row">
+                        <p:message for="password" display="text"/>
+                    </div>
+                    <div class="row">
+                        #{text['user.login.rememberme']}
+                        <h:selectBooleanCheckbox style="margin-left: 10px" value="#{userToLogin.rememberMe}"/>
+                    </div>
+                    <div class="row with-padding">
+                    </div>
+                    <div class="row">
+                        <h:panelGroup>
+                            <p:commandButton id="loginCmd"
+                                             actionListener="#{loginViewController.login(request.getSession().getAttribute('url'))}"
+                                             process="@form"
+                                             update="loginForm"
+                                             value="#{text['user.login.title']}"
+                                             icon="fa fa-sign-in icon"/>
+                        </h:panelGroup>
+                    </div>
+                    <div class="row with-padding">
+                        <p:message id="msgLogin" for="loginCmd" display="text"/>
+                    </div>
+                    <div class="row with-padding" style="padding-top: 0">
+                        <h:link outcome="/resetpw?rp=true">
+                            <i class="elementicon fa fa-question-circle" />
+                            <h:outputLabel value="#{text['user.login.forgot_password']}" />
+                        </h:link>
+                        <h:link outcome="/registration" style="margin-left: 20px">
+                            <i class="elementicon fa fa-user-plus" />
+                            <h:outputLabel value="#{text['user.authenticate.registration']}" />
+                        </h:link>
+
+                    </div>
+                    <div class="row">
+                        <a href="#{googleOAuthController.createInitialOAuthRequest()}">
+                            <i class="google fa fa-google-plus-square"/>
+                        </a>
+                        <a href="#{facebookOAuthController.createInitialOAuthRequest()}">
+                            <i class="facebook fa fa-facebook-square"/>
+                        </a>
+                        <a href="#{instagramOAuthController.createInitialOAuthRequest()}">
+                            <i class="instagram fa fa-instagram"/>
+                        </a>
+                    </div>
+<ui:remove>
+                    <p:defaultCommand target="loginCmd"/>
+</ui:remove>
+                </h:form>
+            </div>
+        </section>
+    </ui:define>
+</ui:composition>

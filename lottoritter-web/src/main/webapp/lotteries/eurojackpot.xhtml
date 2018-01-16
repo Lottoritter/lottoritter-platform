@@ -1,0 +1,408 @@
+<!--
+    * Copyright 2017 Ulrich Cech & Christopher Schmidt
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * You should have received a copy of the GNU General Public License
+    * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    */
+-->
+<!--
+* @author Christopher Schmidt
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="../WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:outputScript name="js/eurojackpot.js" library=""/>
+
+        <script>
+            var messages = {
+                'lottery.eurojackpot.tipparea.header.normal': "#{text['lottery.eurojackpot.tipparea.header.normal']}",
+                'lottery.eurojackpot.tipparea.header.choose': "#{text['lottery.eurojackpot.tipparea.header.choose']}",
+                'lottery.eurojackpot.tipparea.header.chooseone': "#{text['lottery.eurojackpot.tipparea.header.chooseone']}",
+                'lottery.eurojackpot.tipparea.header.chooseone.additional': "#{text['lottery.eurojackpot.tipparea.header.chooseone.additional']}",
+                'lottery.eurojackpot.tipparea.header.choose.additional': "#{text['lottery.eurojackpot.tipparea.header.choose.additional']}",
+                'lottery.eurojackpot.options.duration.header.1': "#{text['lottery.eurojackpot.options.duration.header.1']}",
+                'lottery.eurojackpot.options.duration.header.2': "#{text['lottery.eurojackpot.options.duration.header.2']}",
+                'lottery.eurojackpot.options.nextdrawing.fr': "#{text['lottery.eurojackpot.options.nextdrawing.fr']}",
+                'lottery.eurojackpot.error.title': "#{text['lottery.eurojackpot.error.title']}",
+                'lottery.eurojackpot.error.missingtipp.why': "#{text['lottery.eurojackpot.error.missingtipp.why']}",
+                'lottery.eurojackpot.error.missingtipp.howtosolve': "#{text['lottery.eurojackpot.error.missingtipp.howtosolve']}",
+                'lottery.eurojackpot.error.notipps.why': "#{text['lottery.eurojackpot.error.notipps.why']}",
+                'lottery.eurojackpot.error.notipps.howtosolve': "#{text['lottery.eurojackpot.error.notipps.howtosolve']}"
+            };
+
+            var prices = {
+                lotto: #{euroJackpotViewController.priceList.pricePerField},
+                feeFirstDrawing: #{euroJackpotViewController.priceList.feeFirstDrawing}
+            };
+
+            var nextDrawing = "#{euroJackpotViewController.nextClosingDate}";
+        </script>
+
+        <div class="content-header" style="background: #ce9f28;"/>
+
+        <section class="content" style="padding-top: 0">
+
+            <div class="ticket-header">
+                <div class="jackpot-text">
+                    <span>#{euroJackpotViewController.getCurrentJackpotLabel()}</span>
+                </div>
+                <div class="next-drawing-text">
+                    #{text['lottery.jackpot.deadline']}
+                    <div class="number"><span class="jsHours">00</span><span class="key">#{text['lottery.jackpot.deadline.hr']}</span></div>
+                    <div class="number"><span class="jsMinutes">00</span><span class="key">#{text['lottery.jackpot.deadline.min']}</span></div>
+                    <div class="number"><span class="jsSeconds">00</span><span class="key">#{text['lottery.jackpot.deadline.sec']}</span></div>
+                </div>
+            </div>
+
+            <div class="ticket">
+                <c:forEach begin="1" end="12" varStatus="status">
+                    <div class="tipparea">
+                        <div class="number">#{status.index}</div>
+
+                        <div class="quickpick secondary-button"
+                             onclick="eurojackpot.quickPick(this, #{status.index})">
+                            <div class="fa fa-magic"/>
+                        </div>
+
+                        <div class="header">
+                            #{text['lottery.eurojackpot.tipparea.header.choose']}
+                        </div>
+
+                        <div class="clearpick secondary-button"
+                             onclick="eurojackpot.clearPick(this, #{status.index})">
+                            <div class="fa fa-trash-o"/>
+                        </div>
+
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 1, #{status.index})">1
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 2, #{status.index})">2
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 3, #{status.index})">3
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 4, #{status.index})">4
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 5, #{status.index})">5
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 6, #{status.index})">6
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 7, #{status.index})">7
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 8, #{status.index})">8
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 9, #{status.index})">9
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 10, #{status.index})">10
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 11, #{status.index})">11
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 12, #{status.index})">12
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 13, #{status.index})">13
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 14, #{status.index})">14
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 15, #{status.index})">15
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 16, #{status.index})">16
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 17, #{status.index})">17
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 18, #{status.index})">18
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 19, #{status.index})">19
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 20, #{status.index})">20
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 21, #{status.index})">21
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 22, #{status.index})">22
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 23, #{status.index})">23
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 24, #{status.index})">24
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 25, #{status.index})">25
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 26, #{status.index})">26
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 27, #{status.index})">27
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 28, #{status.index})">28
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 29, #{status.index})">29
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 30, #{status.index})">30
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 31, #{status.index})">31
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 32, #{status.index})">32
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 33, #{status.index})">33
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 34, #{status.index})">34
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 35, #{status.index})">35
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 36, #{status.index})">36
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 37, #{status.index})">37
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 38, #{status.index})">38
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 39, #{status.index})">39
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 40, #{status.index})">40
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 41, #{status.index})">41
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 42, #{status.index})">42
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 43, #{status.index})">43
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 44, #{status.index})">44
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 45, #{status.index})">45
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 46, #{status.index})">46
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 47, #{status.index})">47
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 48, #{status.index})">48
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 49, #{status.index})">49
+                        </button>
+                        <button class="tippbox jsNormalNumber" onclick="eurojackpot.selectNumber(this, 50, #{status.index})">50
+                        </button>
+
+                        <div class="spacer"/>
+
+                        <button class="tippbox jsAdditionalNumber" onclick="eurojackpot.selectAdditionalNumber(this, 1, #{status.index})">1
+                        </button>
+                        <button class="tippbox jsAdditionalNumber" onclick="eurojackpot.selectAdditionalNumber(this, 2, #{status.index})">2
+                        </button>
+                        <button class="tippbox jsAdditionalNumber" onclick="eurojackpot.selectAdditionalNumber(this, 3, #{status.index})">3
+                        </button>
+                        <button class="tippbox jsAdditionalNumber" onclick="eurojackpot.selectAdditionalNumber(this, 4, #{status.index})">4
+                        </button>
+                        <button class="tippbox jsAdditionalNumber" onclick="eurojackpot.selectAdditionalNumber(this, 5, #{status.index})">5
+                        </button>
+                        <button class="tippbox jsAdditionalNumber" onclick="eurojackpot.selectAdditionalNumber(this, 6, #{status.index})">6
+                        </button>
+                        <button class="tippbox jsAdditionalNumber" onclick="eurojackpot.selectAdditionalNumber(this, 7, #{status.index})">7
+                        </button>
+                        <button class="tippbox jsAdditionalNumber" onclick="eurojackpot.selectAdditionalNumber(this, 8, #{status.index})">8
+                        </button>
+                        <button class="tippbox jsAdditionalNumber" onclick="eurojackpot.selectAdditionalNumber(this, 9, #{status.index})">9
+                        </button>
+                        <button class="tippbox jsAdditionalNumber" onclick="eurojackpot.selectAdditionalNumber(this, 10, #{status.index})">10
+                        </button>
+
+                    </div>
+                </c:forEach>
+            </div>
+            <div class="options">
+                <div class="wrapper" style="margin-right: 10px; margin-left: 30px">
+                    <div class="quickpicks">
+                        <div class="optionHeader">#{text['lottery.eurojackpot.options.quickpicks.header']}</div>
+                        <div style="width: 281px;">
+                            <div class="quicktippbox secondary-button" onclick="eurojackpot.quickPicks(1)">+1</div>
+                            <div class="quicktippbox secondary-button" onclick="eurojackpot.quickPicks(2)">+2</div>
+                            <div class="quicktippbox secondary-button" onclick="eurojackpot.quickPicks(4)">+4</div>
+                            <div class="quicktippbox secondary-button" onclick="eurojackpot.quickPicks(6)">+6</div>
+                            <div class="quicktippbox secondary-button" onclick="eurojackpot.quickPicks(12)"
+                                 style="margin-right: 0;width: 37px;">+12
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="ticketNumber">
+                        <div class="optionHeader">#{text['lottery.eurojackpot.options.ticketNumber.header']}</div>
+                        <div style="width: 281px;">
+                            <div class="number">
+                                <div class="arrow arrowup-first fa fa-arrow-up secondary-button"
+                                     onclick="eurojackpot.ticketNumber.up(this)"/>
+                                <div class="digit jsFirstTicketNumber"/>
+                                <div class="arrow arrowdown-first fa fa-arrow-down secondary-button"
+                                     onclick="eurojackpot.ticketNumber.down(this)"/>
+                            </div>
+                            <div class="number">
+                                <div class="arrow arrowup fa fa-arrow-up secondary-button"
+                                     onclick="eurojackpot.ticketNumber.up(this)"/>
+                                <div class="digit jsSecondTicketNumber"/>
+                                <div class="arrow arrowdown fa fa-arrow-down secondary-button"
+                                     onclick="eurojackpot.ticketNumber.down(this)"/>
+                            </div>
+                            <div class="number">
+                                <div class="arrow arrowup fa fa-arrow-up secondary-button"
+                                     onclick="eurojackpot.ticketNumber.up(this)"/>
+                                <div class="digit jsThirdTicketNumber"/>
+                                <div class="arrow arrowdown fa fa-arrow-down secondary-button"
+                                     onclick="eurojackpot.ticketNumber.down(this)"/>
+                            </div>
+                            <div class="number">
+                                <div class="arrow arrowup fa fa-arrow-up secondary-button"
+                                     onclick="eurojackpot.ticketNumber.up(this)"/>
+                                <div class="digit jsFourthTicketNumber"/>
+                                <div class="arrow arrowdown fa fa-arrow-down secondary-button"
+                                     onclick="eurojackpot.ticketNumber.down(this)"/>
+                            </div>
+                            <div class="number">
+                                <div class="arrow arrowup fa fa-arrow-up secondary-button"
+                                     onclick="eurojackpot.ticketNumber.up(this)"/>
+                                <div class="digit jsFifthTicketNumber"/>
+                                <div class="arrow arrowdown fa fa-arrow-down secondary-button"
+                                     onclick="eurojackpot.ticketNumber.down(this)"/>
+                            </div>
+                            <div class="number">
+                                <div class="arrow arrowup fa fa-arrow-up secondary-button"
+                                     onclick="eurojackpot.ticketNumber.up(this)"/>
+                                <div class="digit jsSixthTicketNumber"/>
+                                <div class="arrow arrowdown fa fa-arrow-down secondary-button"
+                                     onclick="eurojackpot.ticketNumber.down(this)"/>
+                            </div>
+                            <div class="number">
+                                <div class="arrow arrowup-last fa fa-arrow-up secondary-button"
+                                     onclick="eurojackpot.ticketNumber.up(this)"/>
+                                <div class="digit jsSeventhTicketNumber"
+                                     style="background-color: rgba(153, 153, 153, 0.29)"/>
+                                <div class="arrow arrowdown-last fa fa-arrow-down secondary-button"
+                                     onclick="eurojackpot.ticketNumber.down(this)"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wrapper">
+                    <div class="duration" style="margin-right: 15px;">
+                        <div class="optionHeader jsDurationHeader">#{text['lottery.eurojackpot.options.duration.header.1']}</div>
+                        <div>
+                            <div class="durationbox">
+                                <input type="radio" checked="checked" id="one" name="durationSelector"/>
+                                <label for="one" onclick="eurojackpot.changeDuration(1)">#{text['lottery.eurojackpot.options.duration.one']}</label>
+                                <div class="check"/>
+                            </div>
+                            <div class="durationbox">
+                                <input type="radio" id="two" name="durationSelector"/>
+                                <label for="two" onclick="eurojackpot.changeDuration(2)">#{text['lottery.eurojackpot.options.duration.two']}</label>
+                                <div class="check"/>
+
+                            </div>
+                            <div class="durationbox">
+                                <input type="radio" id="three" name="durationSelector"/>
+                                <label for="three" onclick="eurojackpot.changeDuration(3)">#{text['lottery.eurojackpot.options.duration.three']}</label>
+                                <div class="check"/>
+
+                            </div>
+                            <div class="durationbox">
+                                <input type="radio" id="four" name="durationSelector"/>
+                                <label for="four" onclick="eurojackpot.changeDuration(4)">#{text['lottery.eurojackpot.options.duration.four']}</label>
+                                <div class="check"/>
+
+                            </div>
+                            <div class="durationbox">
+                                <input type="radio" id="five" name="durationSelector"/>
+                                <label for="five" onclick="eurojackpot.changeDuration(5)">#{text['lottery.eurojackpot.options.duration.five']}</label>
+                                <div class="check"/>
+
+                            </div>
+                            <div class="durationbox">
+                                <input type="radio" id="eight" name="durationSelector"/>
+                                <label for="eight" onclick="eurojackpot.changeDuration(8)">#{text['lottery.eurojackpot.options.duration.eight']}</label>
+                                <div class="check"/>
+                            </div>
+                            <div class="permaticket">
+                                <div class="checkbox-container">
+                                    <input type="checkbox" id="permaTicketChecked"/>
+                                    <label for="permaTicketChecked" onclick="eurojackpot.togglePermaTicketOption(this)"/>
+                                </div>
+                                <div class="text">#{text['lottery.eurojackpot.options.duration.permaticket']}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wrapper">
+                    <div class="next-drawing">
+                        <div class="optionHeader">#{text['lottery.eurojackpot.options.nextdrawing.header']}</div>
+                        <div class="text jsNextDrawingText">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wrapper" style="float: right; margin-right: 30px;">
+                    <div class="checkout">
+                        <div class="optionHeader">
+                            #{text['lottery.eurojackpot.options.checkout.header']}
+                        </div>
+
+                        <div class="pricetable">
+                            <div class="item">
+                                <div class="name">
+                                    #{text['lottery.eurojackpot.options.checkout.pricetable.eurojackpot']}
+                                </div>
+                                <div class="price">
+                                    <div class="jsLottoPrice">0,00</div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="name">
+                                    #{text['lottery.eurojackpot.options.checkout.pricetable.fees']}
+                                </div>
+                                <div class="price">
+                                    <div class="jsFeePrice">0,00</div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="name">
+                                    #{text['lottery.eurojackpot.options.checkout.pricetable.total']}
+                                </div>
+                                <div class="price">
+                                    <div class="jsTotalPrice">0,00</div>
+                                </div>
+                            </div>
+                        </div>
+                        <h:form id="ticketSubmitForm">
+                            <h:inputHidden id="ticketJSON" value="#{euroJackpotViewController.currentTicketAsJson}"/>
+                            <p:commandButton id="submitTicketBtn"
+                                             actionListener="#{euroJackpotViewController.addTicketToShoppingCart()}"
+                                             update=":headerShoppingCart"
+                                             style="display: none">
+                            </p:commandButton>
+                        </h:form>
+                        <p:commandButton value="#{text['lottery.eurojackpot.options.checkout.buttontext']}"
+                                         icon="clover"
+                                         onclick="submitTicket()"
+                                         style="width: 100%">
+                        </p:commandButton>
+                    </div>
+                </div>
+            </div>
+
+            <ui:include src="../errordialog.xhtml"/>
+
+        </section>
+
+        <script>
+            init();
+        </script>
+
+        <h:outputStylesheet name="css/eurojackpot.css" library=""/>
+
+    </ui:define>
+
+</ui:composition>

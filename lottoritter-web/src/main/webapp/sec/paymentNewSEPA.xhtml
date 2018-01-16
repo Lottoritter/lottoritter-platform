@@ -1,0 +1,115 @@
+<!--
+    * Copyright 2017 Ulrich Cech & Christopher Schmidt
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * You should have received a copy of the GNU General Public License
+    * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    */
+-->
+<!--
+* @author Christopher Schmidt
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="head">
+        <script type="text/javascript">
+            var PAYMILL_PUBLIC_KEY = '09278263624709ef23a006cd4366011c';
+        </script>
+
+        <script type="text/javascript" src = "https://bridge.paymill.com/"></script>
+
+        <script type = "text/javascript">
+            var options = {
+                lang: 'de'
+            };
+
+            var callback = function(error){
+                //Frame could not be loaded, check error object for reason
+                if(error){
+                    console.log(error.apierror,error.message);
+                    // Example: "container_not_found"
+                }
+                //Frame was loaded successfully
+                else {
+                }
+            };
+
+            var initPayframe = function() {
+                paymill.embedFrame('credit-card-fields', options, callback);
+            };
+
+            var submitForm = function() {
+                paymill.createTokenViaFrame({
+                        amount_int: 420, // 420 for 4.20 amount_int hast to be an integer, required
+                        currency: 'EUR', // required
+                        email: '#{currentUser.email}' //required
+                    },
+                    function(error, result) {
+                        // Handle error or process result.
+                        if (error) {
+                            // Token could not be created, check error object for reason.
+                            console.log(error.apierror, error.message);
+                        }
+                        // Token was created successfully and can be sent to backend.
+                        else {
+                            // If you want to log the response in the console
+                            console.log(result.token);
+                            // Fetch the token, and add it to the form, which is then submitted to your server
+                            var form = document.getElementById("payment-form");
+                            var tokenField = document.getElementById("paymillToken");
+                            tokenField.value = result.token;
+                            document.getElementById("toServer").click();
+                        }
+                    }
+                );
+            }
+
+        </script>
+        <ui:param name="onLoadJS" value="initPayframe()" />
+    </ui:define>
+
+
+    <ui:define name="subheader">
+        Bezahlen
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <h:panelGroup id="payment" layout="block" styleClass="card">
+                    <p>Bezahlen mit PAYMILL.</p>
+                    <h:form id="payment-form" prependId="false" method="post"
+                            rendered="#{not paymentPaymillViewController.isPaymillTokenExists()}">
+                        <div id = "credit-card-fields"></div>
+                        <!-- here you can specify any other fields you have in your checkout -->
+                        <p:inputText id="paymillToken" name="paymillToken"
+                                     value="#{paymentPaymillViewController.paymillToken}" type="hidden" />
+                        <!-- insert a button to submit the form -->
+                        <p:commandButton style="visibility: hidden" id="toServer" value="Bezahlen" update="payment"
+                                         actionListener="#{paymentPaymillViewController.submitNewCreditCardPayment}" />
+                    </h:form>
+                    <input type="button" value="Bezahlen" onclick="submitForm()"
+                           class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" />
+                    <h:panelGroup rendered="#{paymentPaymillViewController.isPaymillTokenExists()}">
+                        #{paymentPaymillViewController.paymillToken}
+                    </h:panelGroup>
+                </h:panelGroup>
+            </div>
+
+        </div>
+    </ui:define>
+
+</ui:composition>

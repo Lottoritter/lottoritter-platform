@@ -1,0 +1,55 @@
+<!--
+    * Copyright 2017 Ulrich Cech & Christopher Schmidt
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * You should have received a copy of the GNU General Public License
+    * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    */
+-->
+<!--
+* @author Christopher Schmidt
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <section class="content no-header">
+
+            <p:growl/>
+
+            <div class="form single-column-form">
+                <h:form id="registrationForm">
+                    <h1>#{text['user.registration.caption']}</h1>
+                    <div class="row">
+                        <p:outputLabel value="Willkommen, die Registrierung war erfolgreich."/>
+                    </div>
+                    <div class="row with-padding">
+                        <p:outputLabel
+                                value="Wir haben Dir eine Nachricht an die eingegebene E-Mail-Adresse geschickt, um das Konto endgültig zu aktivieren."/>
+                    </div>
+                    <div class="row">
+                        <p:outputLabel value="Die Lottoritter wünsche Dir ganz viel Glück!"/>
+                    </div>
+                    <div class="row with-padding">
+                    <p:button outcome="/index" value="Zurück zur Hauptseite"
+                              style="margin-top: 20px;"/>
+
+                    </div>
+                </h:form>
+            </div>
+        </section>
+    </ui:define>
+</ui:composition>

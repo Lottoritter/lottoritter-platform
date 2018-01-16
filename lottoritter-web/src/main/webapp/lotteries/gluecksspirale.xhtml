@@ -1,0 +1,266 @@
+<!--
+    * Copyright 2017 Ulrich Cech & Christopher Schmidt
+    *
+    * This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+    *
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+    *
+    * You should have received a copy of the GNU General Public License
+    * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    */
+-->
+<!--
+* @author Christopher Schmidt
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="../WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+        <h:outputScript name="js/gluecksspirale.js" library=""/>
+
+        <script>
+            var messages = {
+                'lottery.gluecksspirale.options.duration.header.1': "#{text['lottery.gluecksspirale.options.duration.header.1']}",
+                'lottery.gluecksspirale.options.duration.header.2': "#{text['lottery.gluecksspirale.options.duration.header.2']}",
+                'lottery.gluecksspirale.options.nextdrawing.fr': "#{text['lottery.gluecksspirale.options.nextdrawing.sa']}"
+            };
+
+            var prices = {
+                gluecksspirale: #{gluecksspiraleViewController.priceList.priceGluecksspirale},
+                feeGluecksspirale: #{gluecksspiraleViewController.priceList.feeGluecksspirale}
+            };
+
+            var nextDrawing = "#{gluecksspiraleViewController.nextClosingDate}";
+        </script>
+
+        <div class="content-header" style="background: #c90713;"/>
+
+        <section class="content" style="padding-top: 0">
+
+            <div class="ticket-header">
+                <div class="jackpot-text">
+                    <span>7.500</span> <i class="fa fa-euro"/> #{text['lottery.gluecksspirale.subtitle']}
+                </div>
+                <div class="next-drawing-text">
+                    #{text['lottery.jackpot.deadline']}
+                    <div class="number"><span class="jsHours">00</span><span class="key">#{text['lottery.jackpot.deadline.hr']}</span></div>
+                    <div class="number"><span class="jsMinutes">00</span><span class="key">#{text['lottery.jackpot.deadline.min']}</span></div>
+                    <div class="number"><span class="jsSeconds">00</span><span class="key">#{text['lottery.jackpot.deadline.sec']}</span></div>
+                </div>
+            </div>
+
+            <div class="ticket">
+                <div class="background"/>
+                <div class="ticketNumber">
+                    <div>
+                        <div class="number">
+                            <div class="arrow arrowup-first fa fa-arrow-up secondary-button"
+                                 onclick="gluecksspirale.ticketNumber.up(0)"/>
+                            <div class="digit jsFirstTicketNumber"/>
+                            <div class="arrow arrowdown-first fa fa-arrow-down secondary-button"
+                                 onclick="gluecksspirale.ticketNumber.down(0)"/>
+                        </div>
+                        <div class="number">
+                            <div class="arrow arrowup fa fa-arrow-up secondary-button"
+                                 onclick="gluecksspirale.ticketNumber.up(1)"/>
+                            <div class="digit jsSecondTicketNumber"/>
+                            <div class="arrow arrowdown fa fa-arrow-down secondary-button"
+                                 onclick="gluecksspirale.ticketNumber.down(1)"/>
+                        </div>
+                        <div class="number">
+                            <div class="arrow arrowup fa fa-arrow-up secondary-button"
+                                 onclick="gluecksspirale.ticketNumber.up(2)"/>
+                            <div class="digit jsThirdTicketNumber"/>
+                            <div class="arrow arrowdown fa fa-arrow-down secondary-button"
+                                 onclick="gluecksspirale.ticketNumber.down(2)"/>
+                        </div>
+                        <div class="number">
+                            <div class="arrow arrowup fa fa-arrow-up secondary-button"
+                                 onclick="gluecksspirale.ticketNumber.up(3)"/>
+                            <div class="digit jsFourthTicketNumber"/>
+                            <div class="arrow arrowdown fa fa-arrow-down secondary-button"
+                                 onclick="gluecksspirale.ticketNumber.down(3)"/>
+                        </div>
+                        <div class="number">
+                            <div class="arrow arrowup fa fa-arrow-up secondary-button"
+                                 onclick="gluecksspirale.ticketNumber.up(4)"/>
+                            <div class="digit jsFifthTicketNumber"/>
+                            <div class="arrow arrowdown fa fa-arrow-down secondary-button"
+                                 onclick="gluecksspirale.ticketNumber.down(4)"/>
+                        </div>
+                        <div class="number">
+                            <div class="arrow arrowup fa fa-arrow-up secondary-button"
+                                 onclick="gluecksspirale.ticketNumber.up(5)"/>
+                            <div class="digit jsSixthTicketNumber"/>
+                            <div class="arrow arrowdown fa fa-arrow-down secondary-button"
+                                 onclick="gluecksspirale.ticketNumber.down(5)"/>
+                        </div>
+                        <div class="number">
+                            <div class="arrow arrowup-last fa fa-arrow-up secondary-button"
+                                 onclick="gluecksspirale.ticketNumber.up(6)"/>
+                            <div class="digit jsSeventhTicketNumber"/>
+                            <div class="arrow arrowdown-last fa fa-arrow-down secondary-button"
+                                 onclick="gluecksspirale.ticketNumber.down(6)"/>
+                        </div>
+                        <div class="random secondary-button" onclick="gluecksspirale.ticketNumber.random()">
+                            <div class="fa fa-magic fa-2x"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="options">
+                <div class="wrapper" style="float: right; margin-right: 30px;">
+                    <div class="checkout">
+                        <div class="optionHeader">
+                            #{text['lottery.gluecksspirale.options.checkout.header']}
+                        </div>
+
+                        <div class="pricetable">
+                            <div class="item">
+                                <div class="name">
+                                    #{text['lottery.gluecksspirale.options.checkout.pricetable.gluecksspirale']}
+                                </div>
+                                <div class="price">
+                                    <div class="jsLottoPrice">0,00</div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="name">
+                                    #{text['lottery.gluecksspirale.options.checkout.pricetable.fees']}
+                                </div>
+                                <div class="price">
+                                    <div class="jsFeePrice">0,00</div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="name">
+                                    #{text['lottery.gluecksspirale.options.checkout.pricetable.total']}
+                                </div>
+                                <div class="price">
+                                    <div class="jsTotalPrice">0,00</div>
+                                </div>
+                            </div>
+                        </div>
+                        <h:form id="ticketSubmitForm">
+                            <h:inputHidden id="ticketJSON" value="#{gluecksspiraleViewController.currentTicketAsJson}"/>
+                            <p:commandButton id="submitTicketBtn"
+                                             actionListener="#{gluecksspiraleViewController.addTicketToShoppingCart()}"
+                                             update=":headerShoppingCart"
+                                             style="display: none">
+                            </p:commandButton>
+                        </h:form>
+                        <p:commandButton value="#{text['lottery.gluecksspirale.options.checkout.buttontext']}"
+                                         icon="clover"
+                                         onclick="submitTicket()"
+                                         style="width: 100%">
+                        </p:commandButton>
+                    </div>
+                </div>
+
+                <div class="wrapper">
+                    <div class="duration">
+                        <div class="optionHeader jsDurationHeader">#{text['lottery.gluecksspirale.options.duration.header.1']}</div>
+                        <div>
+                            <div class="durationbox">
+                                <input type="radio" checked="checked" id="one" name="durationSelector"/>
+                                <label for="one" onclick="gluecksspirale.changeDuration(1)">#{text['lottery.gluecksspirale.options.duration.one']}</label>
+                                <div class="check"/>
+                            </div>
+                            <div class="durationbox">
+                                <input type="radio" id="two" name="durationSelector"/>
+                                <label for="two" onclick="gluecksspirale.changeDuration(2)">#{text['lottery.gluecksspirale.options.duration.two']}</label>
+                                <div class="check"/>
+
+                            </div>
+                            <div class="durationbox">
+                                <input type="radio" id="three" name="durationSelector"/>
+                                <label for="three" onclick="gluecksspirale.changeDuration(3)">#{text['lottery.gluecksspirale.options.duration.three']}</label>
+                                <div class="check"/>
+
+                            </div>
+                            <div class="durationbox">
+                                <input type="radio" id="four" name="durationSelector"/>
+                                <label for="four" onclick="gluecksspirale.changeDuration(4)">#{text['lottery.gluecksspirale.options.duration.four']}</label>
+                                <div class="check"/>
+
+                            </div>
+                            <div class="durationbox">
+                                <input type="radio" id="five" name="durationSelector"/>
+                                <label for="five" onclick="gluecksspirale.changeDuration(5)">#{text['lottery.gluecksspirale.options.duration.five']}</label>
+                                <div class="check"/>
+
+                            </div>
+                            <div class="durationbox">
+                                <input type="radio" id="eight" name="durationSelector"/>
+                                <label for="eight" onclick="gluecksspirale.changeDuration(8)">#{text['lottery.gluecksspirale.options.duration.eight']}</label>
+                                <div class="check"/>
+                            </div>
+                            <div class="permaticket">
+                                <div class="checkbox-container">
+                                    <input type="checkbox" id="permaTicketChecked"/>
+                                    <label for="permaTicketChecked" onclick="gluecksspirale.togglePermaTicketOption(this)"/>
+                                </div>
+                                <div class="text">#{text['lottery.gluecksspirale.options.duration.permaticket']}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wrapper">
+                    <div class="next-drawing">
+                        <div class="optionHeader">#{text['lottery.gluecksspirale.options.nextdrawing.header']}</div>
+                        <div class="text jsNextDrawingText">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wrapper">
+                    <div class="ticketNumber">
+                        <div class="optionHeader">#{text['lottery.gluecksspirale.options.ticketNumber.header']}</div>
+                        <div>
+                            <div class="number">
+                                <div class="digit jsFirstTicketNumber"/>
+                            </div>
+                            <div class="number">
+                                <div class="digit jsSecondTicketNumber"/>
+                            </div>
+                            <div class="number">
+                                <div class="digit jsThirdTicketNumber"/>
+                            </div>
+                            <div class="number">
+                                <div class="digit jsFourthTicketNumber"/>
+                            </div>
+                            <div class="number">
+                                <div class="digit jsFifthTicketNumber"/>
+                            </div>
+                            <div class="number">
+                                <div class="digit jsSixthTicketNumber"/>
+                            </div>
+                            <div class="number">
+                                <div class="digit jsSeventhTicketNumber"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            init();
+        </script>
+
+        <h:outputStylesheet name="css/gluecksspirale.css" library=""/>
+
+    </ui:define>
+
+</ui:composition>
