@@ -27,8 +27,9 @@ platform. See some features below.
 - sum of money you spent
 - show the hit numbers in the ticket-history
 - automatic drawing crawler
+- multi language support (i18n)
 
 ## License
 
-This project is licensed under the GPLv3 License - see the [LICENSE](https://github.com/lottoritter/master/LICENSE) file
+This project is licensed under the GPLv3 License - see the [LICENSE](https://github.com/Lottoritter/lottoritter-platform/blob/master/LICENSE) file
 for details.
