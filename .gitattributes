@@ -1,2 +1,2 @@
-*.txt       linguist-vendored
-lottoritter-core/src/main/resources/de/lottoritter/platform/persistence/migration/versions/*      linguist-vendored
+*.txt       linguist-vendored=false
+lottoritter-core/src/main/resources/de/lottoritter/platform/persistence/migration/versions/*      linguist-vendored=false
