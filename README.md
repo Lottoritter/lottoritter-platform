@@ -28,6 +28,7 @@ platform. See some features below.
 - show the hit numbers in the ticket-history
 - automatic drawing crawler
 - multi language support (i18n)
+- social authentication (G+, Facebook, Instagram)
 
 ## License
 
