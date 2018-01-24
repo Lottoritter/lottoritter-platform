@@ -2256,6 +2256,36 @@ body {
       border-radius: 50%;
     }
 
+    .poweredBy {
+      margin-top: 30px;
+      margin-left: 600px;
+      width: 100%;
+      float: left;
+      text-align: left;
+    }
+
+    .payara {
+      display: inline-block;
+      position: absolute;
+      top: 200px;
+      left: 325px;
+      width: 30%;
+      height: 30%;
+      background: url("\#{resource['images:payara_blue_300dpi.jpg']}") no-repeat center;
+      background-size: contain;
+    }
+
+    .mongodb {
+      display: inline-block;
+      position: absolute;
+      top: 200px;
+      left: 575px;
+      width: 30%;
+      height: 30%;
+      background: url("\#{resource['images:mongodb_gray_logo_fullcolor.jpg']}") no-repeat center;
+      background-size: contain;
+    }
+
     .title {
       font-size: 40px;
       margin: 25px;
