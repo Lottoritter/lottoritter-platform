@@ -1,3 +1,4 @@
 *.txt       linguist-vendored
 *.csv       linguist-vendored
 lottoritter-core/src/main/resources/de/lottoritter/platform/persistence/migration/versions/*      linguist-vendored
+lottoritter-web/src/main/resources/template/mail/* linguist-vendored
