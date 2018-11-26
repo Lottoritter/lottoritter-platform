@@ -38,7 +38,7 @@ public class EncryptionService {
 
     @Inject
     @Configurable(value = "encryptionKey", defaultValue = "")
-    private Instance<String> encryptionKey;
+    Instance<String> encryptionKey;
 
     private Key aesKey;
 

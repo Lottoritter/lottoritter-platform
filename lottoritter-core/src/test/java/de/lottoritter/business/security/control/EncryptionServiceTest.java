@@ -23,8 +23,13 @@ import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 
+import javax.enterprise.inject.Instance;
+import javax.enterprise.util.TypeLiteral;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.util.Base64;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.Assert.assertThat;
@@ -35,12 +40,18 @@ import static org.junit.Assert.assertThat;
 public class EncryptionServiceTest extends FongoDbPersistenceTest {
 
     @Test
-    public void encryptData() {
-        final String base64Encoded = "4EGUAy2YZUIPrOAgciWyxkMn6q7a0JlTsu8zI8kdM+s=";
+    public void encryptData() throws NoSuchFieldException, IllegalAccessException {
+        final String base64Encoded = "hfZcGLKmy9Q9iPRR+3XfmV7TzHoYU+6NKvJk4gSZfI0=";
         EncryptionService cut = new EncryptionService();
+        cut.encryptionKey = createEncryptionKey("01234567890123456789012345678912");
         final Charset charset = Charset.forName("UTF-8");
         final byte[] bytes = cut.encryptData("test@example.com".getBytes(charset));
         assertThat(new String(Base64.getEncoder().encode(bytes)), CoreMatchers.is(base64Encoded));
+
+        final EncryptionService encryptionService = getEncryptedFieldConverter().getEncryptionService();
+        final Field encryptionKeyField = encryptionService.getClass().getDeclaredField("encryptionKey");
+        encryptionKeyField.setAccessible(true);
+        encryptionKeyField.set(encryptionService, cut.encryptionKey);
 
         TestPlayer testPlayer = new TestPlayer();
         testPlayer.setEmail("test@example.com");
@@ -52,9 +63,55 @@ public class EncryptionServiceTest extends FongoDbPersistenceTest {
 
     @Test
     public void decryptData() throws Exception {
-        final String base64Encoded = "4EGUAy2YZUIPrOAgciWyxkMn6q7a0JlTsu8zI8kdM+s=";
+        final String base64Encoded = "hfZcGLKmy9Q9iPRR+3XfmV7TzHoYU+6NKvJk4gSZfI0=";
         EncryptionService cut = new EncryptionService();
+        cut.encryptionKey = createEncryptionKey("01234567890123456789012345678912");
         assertThat(new String(cut.decryptData(Base64.getDecoder().decode(base64Encoded))), Is.is("test@example.com"));
+    }
+
+
+    private Instance<String> createEncryptionKey(String val) {
+        return new Instance<String>() {
+            @Override
+            public Iterator<String> iterator() {
+                return null;
+            }
+
+            @Override
+            public Instance<String> select(Annotation... qualifiers) {
+                return null;
+            }
+
+            @Override
+            public boolean isUnsatisfied() {
+                return false;
+            }
+
+            @Override
+            public boolean isAmbiguous() {
+                return false;
+            }
+
+            @Override
+            public void destroy(String instance) {
+
+            }
+
+            @Override
+            public <U extends String> Instance<U> select(TypeLiteral<U> subtype, Annotation... qualifiers) {
+                return null;
+            }
+
+            @Override
+            public <U extends String> Instance<U> select(Class<U> subtype, Annotation... qualifiers) {
+                return null;
+            }
+
+            @Override
+            public String get() {
+                return val;
+            }
+        };
     }
 
 

@@ -19,16 +19,23 @@ package de.lottoritter.platform.persistence.encryption;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Iterator;
 
+import de.lottoritter.business.security.control.EncryptionService;
 import org.apache.commons.codec.binary.Base64;
 import org.junit.Test;
 import org.mongodb.morphia.mapping.MappedField;
+
+import javax.enterprise.inject.Instance;
+import javax.enterprise.util.TypeLiteral;
 
 /**
  * @author Ulrich Cech
@@ -36,17 +43,17 @@ import org.mongodb.morphia.mapping.MappedField;
 public class EncryptedFieldConverterTest {
 
     private final ZonedDateTime TEST_ZONEDDATETIME = ZonedDateTime.of(2017, 6, 1, 0, 0, 0, 0, ZoneId.of("UTC"));
-    private final String ENCODED_ZONEDDATETIME = "6c18OG+2etLzw5GEbtXYMA==";
+    private final String ENCODED_ZONEDDATETIME = "j7gvQX1JegiayE1P6U0D9Q==";
     private static final String TEST_STRING = "This string should be encrypted";
-    private static final String ENCODED_STRING = "qkaFVjU0jYOzw3ENcE1mtXvi726hPOjCXQBMoJW6T2M=";
+    private static final String ENCODED_STRING = "iFm7IEhDq41K6xcjqYFo1jjNU+7KITZ+ZOHVr0gRlqQ=";
     private static final Integer TEST_INTEGER = 135987665;
-    private static final String ENCODED_INTEGER = "GsdrdPVEjdBRY2uQdiM5Hw==";
+    private static final String ENCODED_INTEGER = "5BN7P1DNXhZ+CVv+I0K7Fw==";
     private static final byte[] TEST_BYTE_ARRAY = new byte[] {1,-112,44,48,-99,65,66,-12,-11};
-    private static final String ENCODED_BYTE_ARRAY = "6ZMM+YPLNdSiFgEfI4WTww==";
+    private static final String ENCODED_BYTE_ARRAY = "q9jx4ZKPjhN1l8hU0/IB4g==";
 
     @Test
     public void encodeZonedDateTime() throws Exception {
-        EncryptedFieldConverter cut = new EncryptedFieldConverter();
+        EncryptedFieldConverter cut = createCut();
         final Field mockedField = mock(Field.class);
         when(mockedField.isAnnotationPresent(Encrypted.class)).thenReturn(true);
         final MappedField mockedMappedField = mock(MappedField.class);
@@ -59,7 +66,7 @@ public class EncryptedFieldConverterTest {
 
     @Test
     public void decodeZonedDateTime() throws Exception {
-        EncryptedFieldConverter cut = new EncryptedFieldConverter();
+        EncryptedFieldConverter cut = createCut();
         final Field mockedField = mock(Field.class);
         when(mockedField.isAnnotationPresent(Encrypted.class)).thenReturn(true);
         final MappedField mockedMappedField = mock(MappedField.class);
@@ -72,7 +79,7 @@ public class EncryptedFieldConverterTest {
 
     @Test
     public void encodeString() throws Exception {
-        EncryptedFieldConverter cut = new EncryptedFieldConverter();
+        EncryptedFieldConverter cut = createCut();
         final Field mockedField = mock(Field.class);
         when(mockedField.isAnnotationPresent(Encrypted.class)).thenReturn(true);
         final MappedField mockedMappedField = mock(MappedField.class);
@@ -85,7 +92,7 @@ public class EncryptedFieldConverterTest {
 
     @Test
     public void decodeString() throws Exception {
-        EncryptedFieldConverter cut = new EncryptedFieldConverter();
+        EncryptedFieldConverter cut = createCut();
         final Field mockedField = mock(Field.class);
         when(mockedField.isAnnotationPresent(Encrypted.class)).thenReturn(true);
         final MappedField mockedMappedField = mock(MappedField.class);
@@ -98,7 +105,7 @@ public class EncryptedFieldConverterTest {
 
     @Test
     public void encodeInteger() throws Exception {
-        EncryptedFieldConverter cut = new EncryptedFieldConverter();
+        EncryptedFieldConverter cut = createCut();
         final Field mockedField = mock(Field.class);
         when(mockedField.isAnnotationPresent(Encrypted.class)).thenReturn(true);
         final MappedField mockedMappedField = mock(MappedField.class);
@@ -111,7 +118,7 @@ public class EncryptedFieldConverterTest {
 
     @Test
     public void decodeInteger() throws Exception {
-        EncryptedFieldConverter cut = new EncryptedFieldConverter();
+        EncryptedFieldConverter cut = createCut();
         final Field mockedField = mock(Field.class);
         when(mockedField.isAnnotationPresent(Encrypted.class)).thenReturn(true);
         final MappedField mockedMappedField = mock(MappedField.class);
@@ -124,7 +131,7 @@ public class EncryptedFieldConverterTest {
 
     @Test
     public void encodeByteArray() throws Exception {
-        EncryptedFieldConverter cut = new EncryptedFieldConverter();
+        EncryptedFieldConverter cut = createCut();
         final Field mockedField = mock(Field.class);
         when(mockedField.isAnnotationPresent(Encrypted.class)).thenReturn(true);
         final MappedField mockedMappedField = mock(MappedField.class);
@@ -138,7 +145,7 @@ public class EncryptedFieldConverterTest {
 
     @Test
     public void decodeByteArray() throws Exception {
-        EncryptedFieldConverter cut = new EncryptedFieldConverter();
+        EncryptedFieldConverter cut = createCut();
         final Field mockedField = mock(Field.class);
         when(mockedField.isAnnotationPresent(Encrypted.class)).thenReturn(true);
         final MappedField mockedMappedField = mock(MappedField.class);
@@ -148,4 +155,63 @@ public class EncryptedFieldConverterTest {
         assertThat(decode, instanceOf(byte[].class));
         assertThat(decode, is(TEST_BYTE_ARRAY));
     }
+
+
+    private EncryptedFieldConverter createCut() {
+        EncryptedFieldConverter cut = new EncryptedFieldConverter();
+        try {
+            final EncryptionService encryptionService = cut.getEncryptionService();
+            final Field encryptionKeyField = encryptionService.getClass().getDeclaredField("encryptionKey");
+            encryptionKeyField.setAccessible(true);
+                encryptionKeyField.set(encryptionService, createEncryptionKey("01234567890123456789012345678912"));
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            fail(e.getMessage());
+        }
+        return cut;
+    }
+
+    private Instance<String> createEncryptionKey(String val) {
+        return new Instance<String>() {
+            @Override
+            public Iterator<String> iterator() {
+                return null;
+            }
+
+            @Override
+            public Instance<String> select(Annotation... qualifiers) {
+                return null;
+            }
+
+            @Override
+            public boolean isUnsatisfied() {
+                return false;
+            }
+
+            @Override
+            public boolean isAmbiguous() {
+                return false;
+            }
+
+            @Override
+            public void destroy(String instance) {
+
+            }
+
+            @Override
+            public <U extends String> Instance<U> select(TypeLiteral<U> subtype, Annotation... qualifiers) {
+                return null;
+            }
+
+            @Override
+            public <U extends String> Instance<U> select(Class<U> subtype, Annotation... qualifiers) {
+                return null;
+            }
+
+            @Override
+            public String get() {
+                return val;
+            }
+        };
+    }
+
 }

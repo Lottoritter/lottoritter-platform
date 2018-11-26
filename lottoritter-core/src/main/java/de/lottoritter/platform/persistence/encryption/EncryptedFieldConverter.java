@@ -105,7 +105,7 @@ public class EncryptedFieldConverter extends TypeConverter implements SimpleValu
                 InitialContext jndi = new InitialContext();
                 encryptionService = (EncryptionService) jndi.lookup("java:global/lottoritter/EncryptionService");
             } catch (NamingException nex) {
-                return new EncryptionService();
+                encryptionService = new EncryptionService();
             }
         }
         return encryptionService;

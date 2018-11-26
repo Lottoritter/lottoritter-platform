@@ -16,19 +16,18 @@
  */
 package de.lottoritter.business.validation.control;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
-
-import java.time.ZonedDateTime;
-
-import javax.validation.ConstraintViolationException;
-import javax.validation.groups.Default;
-
+import de.lottoritter.business.player.entity.PasswordGroup;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.lottoritter.business.player.entity.PasswordGroup;
+import javax.validation.ConstraintViolationException;
+import javax.validation.groups.Default;
+import java.time.ZonedDateTime;
+
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 /**
  * @author Ulrich Cech

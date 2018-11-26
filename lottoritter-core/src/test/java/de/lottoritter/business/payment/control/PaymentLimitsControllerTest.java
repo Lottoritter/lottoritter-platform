@@ -21,12 +21,17 @@ import de.lottoritter.business.payment.entity.PaymentLimits;
 import de.lottoritter.business.payment.entity.PaymentState;
 import de.lottoritter.business.payment.entity.PspCode;
 import de.lottoritter.business.player.entity.Player;
+import de.lottoritter.business.security.control.EncryptionService;
 import de.lottoritter.business.temporal.control.DateTimeService;
-import de.lottoritter.business.validation.control.WeldManager;
 import de.lottoritter.platform.persistence.FongoDbPersistenceTest;
 import org.hamcrest.CoreMatchers;
-import org.junit.BeforeClass;
 import org.junit.Test;
+
+import javax.enterprise.inject.Instance;
+import javax.enterprise.util.TypeLiteral;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.util.Iterator;
 
 import static org.junit.Assert.assertThat;
 
@@ -35,17 +40,15 @@ import static org.junit.Assert.assertThat;
  */
 public class PaymentLimitsControllerTest extends FongoDbPersistenceTest {
 
-    @BeforeClass
-    public static void setup() {
-        WeldManager.getWeld();
-    }
-
-
     @Test
-    public void testCheckMonthLimit() {
+    public void testCheckMonthLimit() throws NoSuchFieldException, IllegalAccessException {
         PaymentLimitsController cut = new PaymentLimitsController();
         cut.dateTimeService = new DateTimeService();
         cut.datastore = getDatastore();
+        final EncryptionService encryptionService = getEncryptedFieldConverter().getEncryptionService();
+        final Field encryptionKeyField = encryptionService.getClass().getDeclaredField("encryptionKey");
+        encryptionKeyField.setAccessible(true);
+        encryptionKeyField.set(encryptionService, createEncryptionKey("01234567890123456789012345678912"));
         TestPlayer player = new TestPlayer();
         player.setEmail("test@example.com");
         final PaymentLimits paymentLimits = new PaymentLimits();
@@ -76,4 +79,47 @@ public class PaymentLimitsControllerTest extends FongoDbPersistenceTest {
         }
     }
 
+    private Instance<String> createEncryptionKey(String val) {
+        return new Instance<String>() {
+            @Override
+            public Iterator<String> iterator() {
+                return null;
+            }
+
+            @Override
+            public Instance<String> select(Annotation... qualifiers) {
+                return null;
+            }
+
+            @Override
+            public boolean isUnsatisfied() {
+                return false;
+            }
+
+            @Override
+            public boolean isAmbiguous() {
+                return false;
+            }
+
+            @Override
+            public void destroy(String instance) {
+
+            }
+
+            @Override
+            public <U extends String> Instance<U> select(TypeLiteral<U> subtype, Annotation... qualifiers) {
+                return null;
+            }
+
+            @Override
+            public <U extends String> Instance<U> select(Class<U> subtype, Annotation... qualifiers) {
+                return null;
+            }
+
+            @Override
+            public String get() {
+                return val;
+            }
+        };
+    }
 }

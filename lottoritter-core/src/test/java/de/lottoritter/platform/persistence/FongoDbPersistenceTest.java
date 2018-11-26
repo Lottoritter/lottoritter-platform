@@ -34,6 +34,8 @@ public class FongoDbPersistenceTest {
 
     private Datastore datastore;
 
+    private EncryptedFieldConverter encryptedFieldConverter;
+
     @Before
     public void initFongo() {
         Fongo fongo = new Fongo("MongoTest1");
@@ -44,7 +46,7 @@ public class FongoDbPersistenceTest {
         morphia.mapPackage("de.lottoritter", true);
         morphia.getMapper().getConverters().addConverter(ZonedDateTimeUTCtoEuropeConverter.class);
         morphia.getMapper().getConverters().addConverter(CurrencyConverter.class);
-        morphia.getMapper().getConverters().addConverter(EncryptedFieldConverter.class);
+        encryptedFieldConverter = (EncryptedFieldConverter) morphia.getMapper().getConverters().addConverter(EncryptedFieldConverter.class);
     }
 
 
@@ -54,5 +56,9 @@ public class FongoDbPersistenceTest {
 
     protected Datastore getDatastore() {
         return datastore;
+    }
+
+    protected EncryptedFieldConverter getEncryptedFieldConverter() {
+        return this.encryptedFieldConverter;
     }
 }
