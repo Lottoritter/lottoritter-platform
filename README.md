@@ -16,7 +16,7 @@ JavaScript. The project is completely independent from any application server.
 
 ## Background
 
-Lottoritter was created by Ulrich Cech & Christopher Schmidt. The main intention was to show that you can create
+Lottoritter was created by [Ulrich Cech](https://github.com/UlrichCech) &  [Christopher Schmidt](https://github.com/crzo). The main intention was to show that you can create
 something really big with just a few tools and frameworks. So we decided to implement a fully featured gambling
 platform. See some features below.
 
