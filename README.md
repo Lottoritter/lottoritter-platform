@@ -2,7 +2,7 @@
 Lottoritter is a gambling platform which supports multiple lotteries. On Lottoritter you can play real lotteries WITHOUT
 SPENDING ANY money. This project is written in Java and is using the JavaEE 8 standard technology stack (EE4J).
 
-The running project can be found here: http://www.lottoritter.de
+The running project can be found here: http://lottoritter.ulrichcech.de
 
 The tech stack further includes [MongoDB](https://www.mongodb.com) as backend storage with
 [MongoDB-Morphia](https://mongodb.github.io/morphia/) as Java Object Document Mapper. The frontend is based on JSF and
