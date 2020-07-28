@@ -38,7 +38,7 @@ import java.util.Objects;
 @Entity(value = "playerlogins", noClassnameStored = true)
 @Indexes({
         @Index(fields = @Field("playerId"),
-                options = @IndexOptions(name = "playerlogins_playerId_1", background = true))
+                options = @IndexOptions(name = "playerId_1", background = true))
 })
 public class PlayerLogin extends PersistentEntity {
 

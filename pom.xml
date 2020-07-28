@@ -31,7 +31,7 @@
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
-            <version>3.4.3</version>
+            <version>3.6.4</version>
         </dependency>
         <dependency>
             <groupId>org.mongodb.morphia</groupId>
@@ -54,6 +54,12 @@
             <groupId>com.paymill</groupId>
             <artifactId>paymill-java</artifactId>
             <version>5.1.6</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>commons-lang3</artifactId>
+                    <groupId>org.apache.commons</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.oltu.oauth2</groupId>
@@ -63,12 +69,12 @@
         <dependency>
             <groupId>org.ocpsoft.rewrite</groupId>
             <artifactId>rewrite-servlet</artifactId>
-            <version>3.4.1.Final</version>
+            <version>3.4.4.Final</version>
         </dependency>
         <dependency>
             <groupId>org.ocpsoft.rewrite</groupId>
             <artifactId>rewrite-config-prettyfaces</artifactId>
-            <version>3.4.1.Final</version>
+            <version>3.4.4.Final</version>
         </dependency>
         <dependency>
             <groupId>org.javers</groupId>
@@ -78,8 +84,7 @@
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
-            <version>6.2</version>
-            <type>jar</type>
+            <version>8.0</version>
         </dependency>
         <!-- Html parser (primary used in crawlers -->
         <dependency>
@@ -91,7 +96,7 @@
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>eclipselink</artifactId>
-            <version>2.7.0</version>
+            <version>2.7.7</version>
         </dependency>
 
 
@@ -120,7 +125,6 @@
             <version>5.1.2.Final</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.jboss.weld.se</groupId>
             <artifactId>weld-se</artifactId>
@@ -164,6 +168,10 @@
                 <exclusion>
                     <artifactId>websocket-client</artifactId>
                     <groupId>org.eclipse.jetty.websocket</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>commons-lang3</artifactId>
+                    <groupId>org.apache.commons</groupId>
                 </exclusion>
             </exclusions>
         </dependency>

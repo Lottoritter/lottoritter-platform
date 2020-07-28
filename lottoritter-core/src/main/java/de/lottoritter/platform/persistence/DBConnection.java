@@ -79,11 +79,11 @@ public class DBConnection {
             List<MongoCredential> credentials = new ArrayList<>();
             return new MongoClient(new ServerAddress(dbServerName, dbServerPort), credentials);
         } else {
-            MongoClientURI uri = new MongoClientURI("mongodb://"
+            MongoClientURI uri = new MongoClientURI("mongodb+srv://"
                     + System.getenv("lottoritter_dbUser") + ":"
                     + System.getenv("lottoritter_dbPassword")
-                    + "@lor-cluster-shard-00-00-us2rg.mongodb.net:27017,lor-cluster-shard-00-01-us2rg.mongodb.net:27017,lor-cluster-shard-00-02-us2rg.mongodb.net:27017/"
-                    + DB_NAME + "?ssl=true&replicaSet=LOR-Cluster-shard-0&authSource=admin");
+                    + "@lor-cluster-us2rg.mongodb.net/"
+                    + DB_NAME + "?ssl=true&retryWrites=true&w=majority");
             return new MongoClient(uri);
         }
     }
